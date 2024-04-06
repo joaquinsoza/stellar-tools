@@ -64,7 +64,9 @@ const FeaturesComponent = () => {
   return (
     <Box py={6} maxW="4xl" mx="auto">
       <Flex flexDirection={"column"} alignItems={"center"} gap={4}>
-        <Text fontSize={"3xl"}>A Suite of Tools for Stellar</Text>
+        <Text fontSize={"3xl"} textAlign="center">
+          A Suite of Tools for Stellar
+        </Text>
         <Text fontSize={"md"} textAlign="center">
           Discover a versatile toolkit for the Stellar/Soroban ecosystem,
           designed to streamline asset creation, account management, and more.
