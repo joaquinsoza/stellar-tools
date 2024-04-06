@@ -13,6 +13,8 @@ import {
   useDisclosure,
   BoxProps,
   FlexProps,
+  VStack,
+  HStack,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -34,6 +36,7 @@ import React, {
 } from "react";
 import { BiCoinStack } from "react-icons/bi";
 import Link from "next/link";
+import { FaDiscord, FaGithub } from "react-icons/fa";
 
 interface LinkItemProps {
   name: string;
@@ -80,7 +83,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       onMouseLeave={() => setIsOpen(false)}
       pos="fixed"
       h="full"
-      overflow={"hidden"}
+      overflow="hidden"
       {...rest}
     >
       <Flex
@@ -126,6 +129,19 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           </NavItem>
         ))}
       </Box>
+      <VStack position="absolute" bottom="0" w="full">
+        <HStack justifyContent="center" spacing={4} pb={4}>
+          <Link
+            href="https://github.com/joaquinsoza/stellar-tools"
+            target="_blank"
+          >
+            <FaGithub fontSize="1.5rem" />
+          </Link>
+          <Link href="https://discord.gg/5znubwk5" target="_blank">
+            <FaDiscord fontSize="1.5rem" />
+          </Link>
+        </HStack>
+      </VStack>
     </Box>
   );
 };

@@ -28,7 +28,7 @@ const slidesData = [
   },
   {
     title: "Okashi",
-    image: "/images/Okashi.svg",
+    image: "/images/okashi.svg",
     href: "https://okashi.dev/",
     bg: "#000",
   },
