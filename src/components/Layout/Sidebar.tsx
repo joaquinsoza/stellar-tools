@@ -32,19 +32,19 @@ import React, {
   useContext,
   useState,
 } from "react";
+import { BiCoinStack } from "react-icons/bi";
+import Link from "next/link";
 
 interface LinkItemProps {
   name: string;
   icon: IconType;
+  href: string;
 }
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
+  href: string;
   children: React.ReactNode;
-}
-
-interface MobileProps extends FlexProps {
-  onOpen: () => void;
 }
 
 interface SidebarProps extends BoxProps {
@@ -52,11 +52,8 @@ interface SidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", icon: FiHome },
-  { name: "Trending", icon: FiTrendingUp },
-  { name: "Explore", icon: FiCompass },
-  { name: "Favourites", icon: FiStar },
-  { name: "Settings", icon: FiSettings },
+  { name: "Home", icon: FiHome, href: "/" },
+  { name: "Assets", icon: BiCoinStack, href: "/assets" },
 ];
 
 interface SidebarContextType {
@@ -86,7 +83,14 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       overflow={"hidden"}
       {...rest}
     >
-      <Flex h="20" alignItems="center" ml="5" justifyContent="space-between">
+      <Flex
+        h="20"
+        alignItems="center"
+        pl="5"
+        justifyContent="space-between"
+        borderBottomWidth="1px"
+        borderBottomColor={useColorModeValue("gray.200", "gray.700")}
+      >
         <Flex align="center" gap={4} borderRadius="lg">
           <Image
             width={45}
@@ -110,62 +114,63 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           onClick={onClose}
         />
       </Flex>
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon} overflow={"hidden"}>
-          {link.name}
-        </NavItem>
-      ))}
+      <Box py={4}>
+        {LinkItems.map((link) => (
+          <NavItem
+            key={link.name}
+            icon={link.icon}
+            href={link.href}
+            overflow={"hidden"}
+          >
+            {link.name}
+          </NavItem>
+        ))}
+      </Box>
     </Box>
   );
 };
-export const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+export const NavItem = ({ icon, href, children, ...rest }: NavItemProps) => {
   return (
-    <Flex
-      align="center"
-      p="4"
-      mx="4"
-      borderRadius="lg"
-      role="group"
-      cursor="pointer"
-      _hover={{
-        bg: useColorModeValue("cyan.400", "gray.600"),
-        color: "white",
-      }}
-      {...rest}
-    >
-      <Icon
-        mr={4}
-        fontSize="24"
-        _groupHover={{
+    <Link href={href}>
+      <Flex
+        align="center"
+        p="4"
+        mx="4"
+        borderRadius="lg"
+        role="group"
+        cursor="pointer"
+        _hover={{
+          bg: useColorModeValue("cyan.400", "gray.600"),
           color: "white",
         }}
-        as={icon}
-      />
-      {children}
-    </Flex>
+        {...rest}
+      >
+        <Icon
+          mr={4}
+          fontSize="24"
+          _groupHover={{
+            color: "white",
+          }}
+          as={icon}
+        />
+        {children}
+      </Flex>
+    </Link>
   );
 };
 
-const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+const SubHeader = () => {
   return (
     <Flex
-      ml={{ base: 0, md: 60 }}
-      px={{ base: 4, md: 4 }}
+      // ml={{ base: 0, md: 60 }}
+      // px={{ base: 4, md: 4 }}
       height="20"
       alignItems="center"
       bg={useColorModeValue("white", "gray.900")}
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent={{ base: "space-between", md: "flex-end" }}
-      {...rest}
     >
-      <IconButton
-        display={{ base: "flex", md: "none" }}
-        onClick={onOpen}
-        variant="outline"
-        aria-label="open menu"
-        icon={<FiMenu />}
-      />
       <Text
         display={{ base: "flex", md: "none" }}
         fontSize="2xl"
@@ -206,8 +211,8 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
             <SidebarContent onClose={onClose} />
           </DrawerContent>
         </Drawer>
-        {/* <MobileNav onOpen={onOpen} /> */}
         <Box ml={{ base: 0, md: 60 }} p="4">
+          {/* <SubHeader /> */}
           {children}
         </Box>
       </Box>
