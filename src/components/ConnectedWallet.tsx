@@ -21,11 +21,9 @@ export function ConnectedWallet() {
   useEffect(() => {
     const getNativeBalance = async () => {
       const account = await serverHorizon?.loadAccount(address!);
-      console.log("🚀 « account:", account?.balances);
       const balance = account?.balances.find(
         (item) => item.asset_type === "native"
       );
-      console.log("🚀 « balance:", balance);
       if (balance?.balance !== "0") {
         setNativeBalance(Number(balance?.balance));
       }
