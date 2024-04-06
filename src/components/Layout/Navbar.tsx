@@ -16,6 +16,9 @@ import { FiMenu } from "react-icons/fi";
 import { Image } from "@chakra-ui/next-js";
 import { useContext } from "react";
 import { SidebarContext } from "./Sidebar";
+import { ConnectWalletButton } from "../Buttons/ConnectWalletButton";
+import { useSorobanReact } from "@soroban-react/core";
+import { ConnectedWallet } from "../ConnectedWallet";
 
 interface Props {
   children: React.ReactNode;
@@ -26,6 +29,7 @@ interface NavProps extends FlexProps {
 }
 
 export default function Nav({ onOpen, ...rest }: NavProps) {
+  const { address } = useSorobanReact();
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen } = useContext(SidebarContext);
 
@@ -66,9 +70,7 @@ export default function Nav({ onOpen, ...rest }: NavProps) {
           >
             {colorMode === "light" ? <BiMoon /> : <BiSun />}
           </Button>
-          <Button colorScheme="pink" variant="solid">
-            Connect Wallet
-          </Button>
+          {address ? <ConnectedWallet /> : <ConnectWalletButton />}
           <IconButton
             display={{ base: "flex", md: "none" }}
             onClick={onOpen}
