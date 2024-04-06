@@ -41,6 +41,7 @@ export default function Nav({ onOpen, ...rest }: NavProps) {
       transition="padding-left 0.3s ease"
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
+      {...rest}
     >
       <Flex
         h={16}

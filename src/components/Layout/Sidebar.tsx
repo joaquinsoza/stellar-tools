@@ -159,31 +159,6 @@ export const NavItem = ({ icon, href, children, ...rest }: NavItemProps) => {
   );
 };
 
-const SubHeader = () => {
-  return (
-    <Flex
-      // ml={{ base: 0, md: 60 }}
-      // px={{ base: 4, md: 4 }}
-      height="20"
-      alignItems="center"
-      bg={useColorModeValue("white", "gray.900")}
-      borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue("gray.200", "gray.700")}
-      justifyContent={{ base: "space-between", md: "flex-end" }}
-    >
-      <Text
-        display={{ base: "flex", md: "none" }}
-        fontSize="2xl"
-        fontFamily="monospace"
-        fontWeight="bold"
-      >
-        Logo
-      </Text>
-      FDDDDDDDD
-    </Flex>
-  );
-};
-
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -194,10 +169,11 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
       value={{ isOpen: isSidebarOpen, setIsOpen: setIsSidebarOpen }}
     >
       <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
-        <Nav onOpen={onOpen} />
+        <Nav onOpen={onOpen} zIndex={50} />
         <SidebarContent
           onClose={() => onClose}
           display={{ base: "none", md: "block" }}
+          zIndex={50}
         />
         <Drawer
           isOpen={isOpen}
@@ -211,8 +187,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
             <SidebarContent onClose={onClose} />
           </DrawerContent>
         </Drawer>
-        <Box ml={{ base: 0, md: 60 }} p="4">
-          {/* <SubHeader /> */}
+        <Box ml={{ base: 0, md: 20 }} p="4" pt={24}>
           {children}
         </Box>
       </Box>
