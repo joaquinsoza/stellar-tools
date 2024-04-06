@@ -1,6 +1,6 @@
 {
   "name": "stellar-tools",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -24,11 +24,13 @@
     "@stellar/stellar-sdk": "^11.3.0",
     "@vercel/analytics": "^1.2.2",
     "framer-motion": "^11.0.25",
+    "lodash": "^4.17.21",
     "next": "14.1.4",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.0.1",
-    "swiper": "^11.1.0"
+    "swiper": "^11.1.0",
+    "swr": "^2.2.5"
   },
   "devDependencies": {
     "@types/node": "^20",

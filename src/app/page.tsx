@@ -3,7 +3,7 @@ import FeaturesComponent from "@/components/FeaturesComponent";
 
 export default function Home() {
   return (
-    <main className="">
+    <main>
       <FeaturedSlider />
       <FeaturesComponent />
     </main>
