@@ -43,6 +43,8 @@ const SearchBar = () => {
       const matchesName = asset.name?.toLowerCase().includes(term);
       const matchesDomain = asset.domain?.toLowerCase().includes(term);
 
+      //TODO: if no matches llok in the blockchain with useAsset or similar
+
       return (
         matchesCodeIssuer ||
         matchesContract ||

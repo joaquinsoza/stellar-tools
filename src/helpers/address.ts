@@ -14,3 +14,8 @@ export function shortenAddress(address: string, chars = 4): string {
   }
   return `${parsed.substring(0, chars)}...${parsed.substring(56 - chars)}`;
 }
+
+export function isCodeIssuerPair(input: string) {
+  if (!input) return;
+  return input.includes("-") || input.includes(":");
+}

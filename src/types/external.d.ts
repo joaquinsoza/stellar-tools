@@ -6,17 +6,18 @@ export interface AssetListDescriptor {
   url: string;
 }
 
-export interface Asset {
+export type Asset = {
   name: string;
-  contract?: string;
-  code?: string;
-  issuer?: string;
+  code: string;
   org: string;
   domain: string;
   icon: string;
-  decimals?: number;
+  decimals: number;
   comment?: string;
-}
+} & (
+  | { contract: string; issuer?: string }
+  | { issuer: string; contract: string }
+);
 
 export interface AssetList {
   name: string;

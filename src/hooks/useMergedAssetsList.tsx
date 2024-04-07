@@ -3,7 +3,11 @@ import _ from "lodash";
 // @ts-ignore
 import * as StellarAssetListsSdk from "@stellar-asset-lists/sdk";
 import { Asset, Networks } from "@stellar/stellar-sdk";
-import { AssetListDescriptor } from "@/types/external";
+import {
+  Asset as AssetType,
+  AssetListDescriptor,
+  AssetList,
+} from "@/types/external";
 
 export function useMergedAssetLists() {
   // Fetch the catalogue using SWR.
@@ -19,8 +23,7 @@ export function useMergedAssetLists() {
       const lists = await Promise.all(
         urls.map(StellarAssetListsSdk.fetchAssetList)
       );
-      console.log("🚀 « lists:", lists);
-      let mergedAssets = _.flatten(lists.map((list) => list.assets));
+      let mergedAssets = _.flatten(lists.map((list: AssetList) => list.assets));
 
       // Enhance assets without a contract.
       mergedAssets = mergedAssets.map((asset) => {
