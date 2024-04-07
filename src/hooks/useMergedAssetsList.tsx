@@ -18,6 +18,7 @@ export function useMergedAssetLists() {
     () => catalogue?.map((entry) => entry.url),
     async (urls) => {
       const lists = await Promise.all(urls.map(fetchAssetList));
+      console.log("🚀 « lists:", lists);
       let mergedAssets = _.flatten(lists.map((list) => list.assets));
 
       // Enhance assets without a contract.
@@ -31,6 +32,7 @@ export function useMergedAssetLists() {
             console.error("Error generating contract for asset:", asset, error);
           }
         }
+
         return asset;
       });
 

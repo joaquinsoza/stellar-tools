@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import {
   InputGroup,
   InputLeftElement,
@@ -9,13 +9,15 @@ import {
   PopoverContent,
   Box,
   Text,
-  Modal,
   useOutsideClick,
   useDisclosure,
+  Avatar,
+  Flex,
 } from "@chakra-ui/react";
 import { IoMdSearch } from "react-icons/io";
 import { useMergedAssetLists } from "@/hooks/useMergedAssetsList";
 import Link from "next/link";
+import { Asset } from "@stellar-asset-lists/sdk";
 
 const SearchBar = () => {
   const { assets } = useMergedAssetLists();
@@ -51,11 +53,11 @@ const SearchBar = () => {
     });
   }, [searchTerm, assets]);
 
-  const getRedirectUrl = (asset: any) => {
+  const getRedirectUrl = (asset: Asset) => {
     if (asset.contract) {
       return `/assets/${asset.contract}`;
     } else if (!asset.contract) {
-      return `/assets/${asset.code}:${asset.issuer}`;
+      return `/assets/${asset.code}-${asset.issuer}`;
     }
     // Fallback or additional conditions here
     return "#"; // Placeholder: adjust according to logic
@@ -87,14 +89,31 @@ const SearchBar = () => {
           <Box p={4}>
             {filteredAssets?.map((asset, index) => (
               <Link key={index} href={getRedirectUrl(asset)} onClick={onClose}>
-                <Box key={index} paddingY="2">
-                  <Text fontWeight="bold">{asset.name}</Text>
-                  <Text fontSize="sm">
-                    {asset.code}:{asset.issuer}
-                  </Text>
-                  <Text fontSize="sm">{asset.org}</Text>
-                  <Text fontSize="sm">{asset.domain}</Text>
-                </Box>
+                <Flex
+                  key={index}
+                  paddingY="2"
+                  alignItems={"center"}
+                  justifyContent={"flex-start"}
+                  gap={4}
+                  borderBottomWidth="1px"
+                  borderBottomColor={"gray.200"}
+                >
+                  <Avatar src={asset.icon}></Avatar>
+                  <Box>
+                    <Flex gap={2} alignItems={"center"}>
+                      {asset.name ? (
+                        <>
+                          <Text fontWeight="bold">{asset.name}</Text>
+                          <Text fontSize="xs">{asset.code}</Text>
+                        </>
+                      ) : (
+                        <Text fontWeight="bold">{asset.code}</Text>
+                      )}
+                    </Flex>
+                    <Text fontSize="sm">{asset.domain}</Text>
+                    <Text fontSize="sm">{asset.contract}</Text>
+                  </Box>
+                </Flex>
               </Link>
             ))}
           </Box>
