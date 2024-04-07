@@ -1,23 +1,24 @@
 import useSWR from "swr";
 import _ from "lodash";
-import {
-  fetchAvailableAssetLists,
-  fetchAssetList,
-} from "@stellar-asset-lists/sdk";
+// @ts-ignore
+import * as StellarAssetListsSdk from "@stellar-asset-lists/sdk";
 import { Asset, Networks } from "@stellar/stellar-sdk";
+import { AssetListDescriptor } from "@/types/external";
 
 export function useMergedAssetLists() {
   // Fetch the catalogue using SWR.
   const { data: catalogue, error: catalogueError } = useSWR(
     "catalogue",
-    fetchAvailableAssetLists
+    StellarAssetListsSdk.fetchAvailableAssetLists
   );
 
   // Once the catalogue is available, fetch all asset lists and merge them.
   const { data, error: assetListsError } = useSWR(
-    () => catalogue?.map((entry) => entry.url),
+    () => catalogue?.map((entry: AssetListDescriptor) => entry.url),
     async (urls) => {
-      const lists = await Promise.all(urls.map(fetchAssetList));
+      const lists = await Promise.all(
+        urls.map(StellarAssetListsSdk.fetchAssetList)
+      );
       console.log("🚀 « lists:", lists);
       let mergedAssets = _.flatten(lists.map((list) => list.assets));
 

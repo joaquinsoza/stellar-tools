@@ -17,7 +17,7 @@ import {
 import { IoMdSearch } from "react-icons/io";
 import { useMergedAssetLists } from "@/hooks/useMergedAssetsList";
 import Link from "next/link";
-import { Asset } from "@stellar-asset-lists/sdk";
+import { Asset } from "@/types/external";
 
 const SearchBar = () => {
   const { assets } = useMergedAssetLists();
