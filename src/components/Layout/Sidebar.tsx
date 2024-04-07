@@ -15,6 +15,7 @@ import {
   FlexProps,
   VStack,
   HStack,
+  Heading,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -99,17 +100,17 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             width={45}
             height={45}
             alt="StellarTools"
-            src={"/StellarTools-removebg.png"}
+            src={"/stellartools.svg"}
           />
-          <Text
-            fontSize={"xl"}
+          <Heading
+            fontFamily={"bukhari"}
+            fontSize={"2xl"}
             whiteSpace="nowrap"
             overflow="hidden"
             textOverflow="clip"
-            as={"b"}
           >
             Stellar Tools
-          </Text>
+          </Heading>
         </Flex>
         <CloseButton
           display={{ base: "flex", md: "none" }}

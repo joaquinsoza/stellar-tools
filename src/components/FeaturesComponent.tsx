@@ -45,17 +45,17 @@ const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
 const FeaturesComponent = () => {
   const features = [
     {
-      icon: "/StellarTools-removebg.png",
+      icon: "/stellartools.svg",
       title: "Assets",
       description: "View asset details, including contract and issuer data.",
     },
     {
-      icon: "/StellarTools-removebg.png",
+      icon: "/stellartools.svg",
       title: "Balances",
       description: "Manage your portfolio, track your asset performance.",
     },
     {
-      icon: "/StellarTools-removebg.png",
+      icon: "/stellartools.svg",
       title: "Transactions",
       description: "Review your Stellar and Soroban transaction history.",
     },

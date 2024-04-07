@@ -61,7 +61,7 @@ export default function Nav({ onOpen, ...rest }: NavProps) {
           alt="StellarTools"
           width={35}
           height={35}
-          src={"/StellarTools-removebg.png"}
+          src={"/stellartools.svg"}
         />
         <Stack direction={"row"} spacing={4}>
           <Button
