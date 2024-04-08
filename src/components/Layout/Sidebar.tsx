@@ -103,13 +103,13 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             src={"/stellartools.svg"}
           />
           <Heading
-            fontFamily={"bukhari"}
-            fontSize={"2xl"}
+            fontFamily={"roboto"}
+            fontSize={"lg"}
             whiteSpace="nowrap"
             overflow="hidden"
             textOverflow="clip"
           >
-            Stellar Tools
+            STELLAR TOOLS
           </Heading>
         </Flex>
         <CloseButton

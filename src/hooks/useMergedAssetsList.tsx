@@ -8,6 +8,7 @@ import {
   AssetListDescriptor,
   AssetList,
 } from "@/types/external";
+import { xlmAsset } from "@/components/constants/xlmAsset";
 
 export function useMergedAssetLists() {
   // Fetch the catalogue using SWR.
@@ -39,6 +40,8 @@ export function useMergedAssetLists() {
 
         return asset;
       });
+
+      mergedAssets.unshift(xlmAsset);
 
       // Remove duplicates, preferring entries with contracts.
       return _.uniqWith(mergedAssets, (a, b) => {
