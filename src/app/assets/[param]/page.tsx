@@ -1,5 +1,6 @@
 "use client";
 import { AssetCard } from "@/components/Assets/AssetCard";
+import { ManageTrustlineButton } from "@/components/Buttons/ManageTrustlineButton";
 import { CommingSoon } from "@/components/DisabledComponents/CommingSoon";
 import { ConnectWalletToUse } from "@/components/DisabledComponents/ConnectWalletToUse";
 import { isAddress, isCodeIssuerPair, shortenAddress } from "@/helpers/address";
@@ -17,10 +18,16 @@ import {
   Skeleton,
   Stack,
   Card,
-  CardBody,
   Grid,
   useMediaQuery,
   GridItem,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  HStack,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { useParams } from "next/navigation";
 
@@ -110,9 +117,7 @@ export default function Asset() {
                 </>
               )}
             </Box>
-            <Button colorScheme="pink" size="lg">
-              Manage Trustline
-            </Button>
+            <ManageTrustlineButton asset={asset} />
             <Button colorScheme="pink" size="lg">
               Deploy on Soroban
             </Button>
@@ -124,29 +129,64 @@ export default function Asset() {
         </Card>
       </GridItem>
       <GridItem gridArea="moreInfo">
-        <Card rounded="2xl" width="100%">
-          <CardBody>
-            <VStack spacing={1} align="flex-start">
-              <Text>{asset?.comment}</Text>
-              <Text>Issuer: {isMobile ? shortenAddress(issuer) : issuer}</Text>
-              <Text>decimals: {asset?.decimals}</Text>
-              <Text>domain: {asset?.domain}</Text>
-              <Text>organization: {asset?.org}</Text>
-              <Text>Supply: {assetInformation?.amount}</Text>
-              <Text>Holders: {assetInformation?.num_accounts}</Text>
-              {/* <Text>Flags: {JSON.stringify(assetInformation?.flags)}</Text> */}
-              <Link href="#" fontSize="sm">
-                See on stellar.expert
-              </Link>
-              <Link href="#" fontSize="sm">
-                See on stellarchain.io
-              </Link>
-              <Link href="#" fontSize="sm">
-                Swap on soroswap
-              </Link>
-            </VStack>
-          </CardBody>
-        </Card>
+        <Tabs
+          rounded="2xl"
+          width="100%"
+          height={80}
+          bg={"Background"}
+          colorScheme="pink"
+        >
+          <TabList>
+            <Tab>Info</Tab>
+            <Tab>Pools</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <VStack spacing={4} align="flex-start">
+                {asset?.comment && (
+                  <Text fontStyle="italic" color="gray.500">
+                    List provider comment: {`"${asset?.comment}"`}
+                  </Text>
+                )}
+                <SimpleGrid
+                  columns={{ base: 1, md: 2 }}
+                  spacing={2}
+                  width="100%"
+                >
+                  <Text>
+                    <strong>Issuer:</strong> {shortenAddress(issuer)}
+                  </Text>
+                  <Text>
+                    <strong>Decimals:</strong> {asset?.decimals}
+                  </Text>
+                  <Text>
+                    <strong>Organization:</strong> {asset?.org}
+                  </Text>
+                  <Text>
+                    <strong>Supply:</strong> {assetInformation?.amount}
+                  </Text>
+                  <Text>
+                    <strong>Holders:</strong> {assetInformation?.num_accounts}
+                  </Text>
+                </SimpleGrid>
+
+                <HStack spacing={2}>
+                  <Link href="#" fontSize="sm">
+                    See on stellar.expert
+                  </Link>
+                  <Link href="#" fontSize="sm">
+                    See on stellarchain.io
+                  </Link>
+                  <Link href="#" fontSize="sm">
+                    Swap on soroswap
+                  </Link>
+                </HStack>
+              </VStack>
+            </TabPanel>
+
+            <TabPanel>List of pools will be available soon</TabPanel>
+          </TabPanels>
+        </Tabs>
       </GridItem>
       <GridItem gridArea="transactions">
         <Text fontSize="lg" fontWeight="semibold">

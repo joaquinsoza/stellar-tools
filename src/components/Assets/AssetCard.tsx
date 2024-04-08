@@ -1,5 +1,5 @@
 import { shortenAddress } from "@/helpers/address";
-import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { useClipboard } from "@/hooks/useClipboard";
 import { Link } from "@chakra-ui/next-js";
 import {
   Avatar,
@@ -31,7 +31,7 @@ export function AssetCard({
   contract,
   domain,
 }: AssetCardProps) {
-  const copyToClipboard = useCopyToClipboard();
+  const copyToClipboard = useClipboard();
   const [isMobile] = useMediaQuery("(max-width: 768px)");
 
   return (
