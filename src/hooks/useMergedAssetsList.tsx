@@ -60,6 +60,7 @@ export function useMergedAssetLists() {
   );
 
   return {
+    providers: catalogue,
     assets: data,
     isLoading: !catalogue && !catalogueError,
     isError: catalogueError || assetListsError,

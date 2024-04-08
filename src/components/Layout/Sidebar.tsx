@@ -125,6 +125,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             icon={link.icon}
             href={link.href}
             overflow={"hidden"}
+            onClick={onClose}
           >
             {link.name}
           </NavItem>
