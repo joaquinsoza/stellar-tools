@@ -16,7 +16,7 @@ import {
   useToast,
   Spinner,
 } from "@chakra-ui/react";
-import { Asset as AssetType } from "@/types/external";
+import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 import { useAssetForAccount } from "@/hooks/useAsset";
 import { setTrustline } from "@soroban-react/contracts";
 import {

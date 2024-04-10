@@ -20,9 +20,9 @@ import {
 } from "@chakra-ui/react";
 import { useMergedAssetLists } from "@/hooks/useMergedAssetsList";
 import { useState } from "react";
-import { Asset, AssetListDescriptor } from "@/types/external";
 import { useRouter } from "next/navigation";
 import { shortenAddress } from "@/helpers/address";
+import { Asset } from "@stellar-asset-lists/sdk";
 
 interface PaginationProps {
   totalPages: number;
@@ -170,7 +170,7 @@ export default function Assets() {
       <Text color="gray.600" maxW="4xl" textAlign="center">
         Explore a comprehensive directory of assets, curated from various
         trusted providers including{" "}
-        {(providers as AssetListDescriptor[])?.map((provider, index, array) =>
+        {providers?.map((provider, index, array) =>
           index === array.length - 1
             ? `and ${provider.provider}.`
             : `${provider.provider}, `

@@ -1,4 +1,4 @@
-import { Asset } from "@/types/external";
+import { Asset } from "@stellar-asset-lists/sdk";
 import { useMergedAssetLists } from "./useMergedAssetsList";
 import { useAccountBalances } from "./useBalances";
 import { useEffect, useState } from "react";
