@@ -3,7 +3,8 @@ import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import { Providers } from "@/providers";
-import MainLayout from "@/components/Layout/Sidebar";
+import MainLayout from "@/components/Layout/MainLayout";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
