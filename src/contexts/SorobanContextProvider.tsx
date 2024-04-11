@@ -6,7 +6,7 @@ import { ChainMetadata, Connector, WalletChain } from "@soroban-react/types";
 
 const chains: ChainMetadata[] =
   process.env.NODE_ENV === "production"
-    ? [testnet, mainnet]
+    ? [mainnet, testnet]
     : [standalone, testnet, mainnet];
 
 const findWalletChainByName = (name: string): WalletChain | undefined => {
