@@ -1,4 +1,5 @@
 "use client";
+import { AssetActionPanel } from "@/components/Assets/AssetActionPanel";
 import { AssetCard } from "@/components/Assets/AssetCard";
 import { ManageTrustlineButton } from "@/components/Buttons/ManageTrustlineButton";
 import { CommingSoon } from "@/components/DisabledComponents/CommingSoon";
@@ -57,9 +58,6 @@ export default function Asset() {
     : assetInformation?.asset_code;
 
   const issuer = asset?.issuer ? asset.issuer : assetInformation?.asset_issuer;
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
-
-  const { assetForAccount, isLoading } = useAssetForAccount(asset);
 
   return (
     <Grid
@@ -89,44 +87,7 @@ export default function Asset() {
         />
       </GridItem>
       <GridItem gridArea="actions">
-        <Card flex={1} height={"full"} rounded={"2xl"} p={4}>
-          <VStack
-            justifyContent="flex-start"
-            height="100%"
-            alignItems={"stretch"}
-          >
-            <Box bg={"Highlight"} rounded={"lg"} p={2}>
-              <Text fontSize={"lg"} fontWeight={500}>
-                Balance:
-              </Text>
-              <Skeleton isLoaded={!isLoading} fadeDuration={1}>
-                <Text>
-                  {assetForAccount?.balance} {asset?.code}
-                </Text>
-              </Skeleton>
-              {assetForAccount?.limit && (
-                <>
-                  <Text fontSize={"lg"} fontWeight={500}>
-                    Limit:
-                  </Text>
-                  <Skeleton isLoaded={!isLoading} fadeDuration={1}>
-                    <Text>
-                      {assetForAccount?.limit} {asset?.code}
-                    </Text>
-                  </Skeleton>
-                </>
-              )}
-            </Box>
-            <ManageTrustlineButton asset={asset} />
-            <Button colorScheme="pink" size="lg">
-              Deploy on Soroban
-            </Button>
-            <Button colorScheme="pink" size="lg">
-              Bump Contract
-            </Button>
-          </VStack>
-          <ConnectWalletToUse />
-        </Card>
+        <AssetActionPanel asset={asset} />
       </GridItem>
       <GridItem gridArea="moreInfo">
         <Tabs
