@@ -8,7 +8,19 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Stellar Tools",
-  description: "Stellar tools by coderipper",
+  description:
+    "Explore Stellar Tools, the comprehensive toolkit designed to simplify asset management, NFT creation, and more on the Stellar and Soroban ecosystems. Manage your Stellar assets with ease and dive into the world of Soroban smart contracts.",
+  icons: "/stellartools.png",
+  keywords: [
+    "stellar",
+    "tools",
+    "soroban",
+    "ecosystem",
+    "asset management",
+    "NFT minting",
+    "Stellar blockchain tools",
+    "Soroban smart contracts",
+  ],
 };
 
 export default function RootLayout({
