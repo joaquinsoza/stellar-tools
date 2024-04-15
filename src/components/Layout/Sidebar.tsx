@@ -139,7 +139,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           >
             <FaGithub fontSize="1.5rem" />
           </Link>
-          <Link href="https://discord.gg/5znubwk5" target="_blank">
+          <Link href="https://discord.gg/Bq8qSteFSz" target="_blank">
             <FaDiscord fontSize="1.5rem" />
           </Link>
         </HStack>
