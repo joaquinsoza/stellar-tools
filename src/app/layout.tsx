@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Stellar Tools",
   description:
     "Explore Stellar Tools, the comprehensive toolkit designed to simplify asset management, NFT creation, and more on the Stellar and Soroban ecosystems. Manage your Stellar assets with ease and dive into the world of Soroban smart contracts.",
-  icons: "/stellartools.png",
+  icons: "/stellartools.svg",
   keywords: [
     "stellar",
     "tools",
