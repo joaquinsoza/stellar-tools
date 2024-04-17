@@ -1,6 +1,6 @@
 import { useToast } from "@chakra-ui/react";
 
-export const useCopyToClipboard = () => {
+export const useClipboard = () => {
   const toast = useToast();
 
   const copyToClipboard = async (

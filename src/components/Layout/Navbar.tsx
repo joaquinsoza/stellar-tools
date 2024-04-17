@@ -64,7 +64,11 @@ export default function Nav({ onOpen, ...rest }: NavProps) {
           height={35}
           src={"/stellartools.svg"}
         />
-        <Stack direction={"row"} spacing={4}>
+        <Stack
+          direction={"row"}
+          spacing={{ base: 1, md: 4 }}
+          alignItems={"center"}
+        >
           <Button
             display={{ base: "none", md: "flex" }}
             onClick={toggleColorMode}

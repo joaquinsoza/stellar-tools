@@ -1,6 +1,6 @@
 "use client";
 
-import MySorobanReactProvider from "@/components/SorobanContextProvider";
+import MySorobanReactProvider from "@/contexts/SorobanContextProvider";
 import theme from "@/theme";
 import { ChakraProvider } from "@chakra-ui/react";
 

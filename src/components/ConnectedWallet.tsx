@@ -12,24 +12,13 @@ import {
 import { useSorobanReact } from "@soroban-react/core";
 import { BiChevronDown } from "react-icons/bi";
 import { shortenAddress } from "@/helpers/address";
+import { useAssetForAccount } from "@/hooks/useAsset";
+import { xlmAsset } from "./constants/xlmAsset";
 
 export function ConnectedWallet() {
   const sorobanContext = useSorobanReact();
   const { address, disconnect, activeChain, serverHorizon } = sorobanContext;
-  const [nativeBalance, setNativeBalance] = useState<number | undefined>();
-
-  useEffect(() => {
-    const getNativeBalance = async () => {
-      const account = await serverHorizon?.loadAccount(address!);
-      const balance = account?.balances.find(
-        (item) => item.asset_type === "native"
-      );
-      if (balance?.balance !== "0") {
-        setNativeBalance(Number(balance?.balance));
-      }
-    };
-    getNativeBalance();
-  }, [address, serverHorizon, sorobanContext]);
+  const { assetForAccount } = useAssetForAccount(xlmAsset);
 
   const handleDisconnect = () => {
     disconnect();
@@ -37,14 +26,22 @@ export function ConnectedWallet() {
 
   return (
     <Menu>
-      {nativeBalance && (
-        <Button colorScheme={"pink"}>{nativeBalance.toFixed(3)} XLM</Button>
+      {assetForAccount && (
+        <Button
+          fontSize={{ base: "sm", md: "md" }}
+          size={{ base: "sm", md: "md" }}
+          colorScheme={"pink"}
+        >
+          {Number(assetForAccount.balance).toFixed(3)} XLM
+        </Button>
       )}
       <MenuButton
         isActive
         as={Button}
         rightIcon={<BiChevronDown />}
         colorScheme="pink"
+        fontSize={{ base: "sm", md: "md" }}
+        size={{ base: "sm", md: "md" }}
       >
         {shortenAddress(address!)}
       </MenuButton>

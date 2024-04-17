@@ -68,13 +68,13 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             src={"/stellartools.svg"}
           />
           <Heading
-            fontFamily={"bukhari"}
-            fontSize={"2xl"}
+            fontFamily={"roboto"}
+            fontSize={"lg"}
             whiteSpace="nowrap"
             overflow="hidden"
             textOverflow="clip"
           >
-            Stellar Tools
+            STELLAR TOOLS
           </Heading>
         </Flex>
         <CloseButton
@@ -90,6 +90,7 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             icon={link.icon}
             href={link.href}
             overflow={"hidden"}
+            onClick={onClose}
           >
             {link.name}
           </NavItem>
@@ -103,7 +104,7 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           >
             <FaGithub fontSize="1.5rem" />
           </Link>
-          <Link href="https://discord.gg/5znubwk5" target="_blank">
+          <Link href="https://discord.gg/Bq8qSteFSz" target="_blank">
             <FaDiscord fontSize="1.5rem" />
           </Link>
         </HStack>
