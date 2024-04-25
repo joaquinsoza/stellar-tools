@@ -15,10 +15,11 @@ import SearchBar from "./SearchBar";
 import { FiMenu } from "react-icons/fi";
 import { Image } from "@chakra-ui/next-js";
 import { useContext } from "react";
-import { SidebarContext } from "./Sidebar";
+
 import { ConnectWalletButton } from "../Buttons/ConnectWalletButton";
 import { useSorobanReact } from "@soroban-react/core";
 import { ConnectedWallet } from "../ConnectedWallet";
+import { SidebarContext } from "@/context/sidebar/SidebarContext";
 
 interface Props {
   children: React.ReactNode;
