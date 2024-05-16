@@ -14,9 +14,7 @@ import {
   Image,
   Text,
   HStack,
-  Box,
   Flex,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { useSorobanReact } from "@soroban-react/core";
 import { Connector } from "@soroban-react/types";
@@ -35,6 +33,9 @@ export function ConnectWalletButton() {
 
       case "xbull":
         return "/images/xbull-wallet.png";
+
+      case "lobstr":
+        return "https://stellar.creit.tech/wallet-icons/lobstr.svg";
     }
   };
 
@@ -86,7 +87,7 @@ export function ConnectWalletButton() {
                   <HStack spacing={3}>
                     <Image
                       boxSize="24px"
-                      src={findWalletIcon(wallet.id)} // Replace with path to your mockup image
+                      src={findWalletIcon(wallet.id)}
                       alt="xBull"
                     />
                     <Text>{wallet.name}</Text>

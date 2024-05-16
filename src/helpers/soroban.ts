@@ -6,6 +6,7 @@ import {
   Address,
   Asset,
   Operation,
+  SorobanDataBuilder,
   SorobanRpc,
   StrKey,
   Transaction,
@@ -254,6 +255,33 @@ export const bumpContractInstance = async (
     false,
     sorobanContext
   );
+  // @ts-ignore
+  console.log(result.status, "\n");
+};
+
+export const restoreContract = async (
+  contractId: string,
+  sorobanContext: SorobanContextType
+) => {
+  const contract = Address.fromString(contractId);
+  console.log("bumping contract instance: ", contract.toString());
+  const contractInstanceXDR = xdr.LedgerKey.contractData(
+    new xdr.LedgerKeyContractData({
+      contract: contract.toScAddress(),
+      key: xdr.ScVal.scvLedgerKeyContractInstance(),
+      durability: xdr.ContractDataDurability.persistent(),
+    })
+  );
+
+  const txBuilder = await createTxBuilder(sorobanContext);
+  txBuilder.addOperation(Operation.restoreFootprint({}));
+  txBuilder.setSorobanData(
+    new SorobanDataBuilder().setReadWrite([contractInstanceXDR]).build()
+  );
+
+  const tx = txBuilder.build();
+  console.log("XDR:", tx.toXDR());
+  const result = await invokeTransaction(tx, false, sorobanContext);
   // @ts-ignore
   console.log(result.status, "\n");
 };

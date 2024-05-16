@@ -2,6 +2,7 @@ import { standalone, testnet, mainnet } from "@soroban-react/chains";
 import { SorobanReactProvider } from "@soroban-react/core";
 import { freighter } from "@soroban-react/freighter";
 import { xbull } from "@soroban-react/xbull";
+import { lobstr } from "@soroban-react/lobstr";
 import { ChainMetadata, Connector, WalletChain } from "@soroban-react/types";
 
 const chains: ChainMetadata[] =
@@ -19,7 +20,7 @@ const activeChain: WalletChain =
   findWalletChainByName(activeChainName) || testnet;
 
 // Set allowed connectors
-const connectors: Connector[] = [freighter(), xbull()];
+const connectors: Connector[] = [freighter(), xbull(), lobstr()];
 
 export default function MySorobanReactProvider({
   children,
