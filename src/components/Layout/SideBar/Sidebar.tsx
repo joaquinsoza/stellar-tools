@@ -19,6 +19,8 @@ import Link from "next/link";
 import { FaDiscord, FaGithub } from "react-icons/fa";
 import { NavItem } from "./NavItem";
 import { SidebarContext } from "@/context/sidebar/SidebarContext";
+import { IoContract } from "react-icons/io5";
+import { RiContractLine } from "react-icons/ri";
 
 interface LinkItemProps {
   name: string;
@@ -29,6 +31,7 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, href: "/" },
   { name: "Assets", icon: BiCoinStack, href: "/assets" },
+  { name: "Contracts", icon: RiContractLine, href: "/contracts" },
 ];
 
 interface SidebarProps extends BoxProps {
