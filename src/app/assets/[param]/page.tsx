@@ -10,6 +10,8 @@ import {
   UseAssetInformationProps,
   useAssetInformation,
 } from "@/hooks/useAssetInformation";
+import { useClipboard } from "@/hooks/useClipboard";
+import { usePoolsForAsset } from "@/hooks/usePools";
 import {
   Box,
   VStack,
@@ -29,10 +31,12 @@ import {
   TabPanel,
   HStack,
   SimpleGrid,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useParams } from "next/navigation";
 
 export default function Asset() {
+  const copyToClipboard = useClipboard();
   const { param } = useParams<{ param: string }>();
 
   let assetProps: UseAssetProps = {};
@@ -58,6 +62,10 @@ export default function Asset() {
     : assetInformation?.asset_code;
 
   const issuer = asset?.issuer ? asset.issuer : assetInformation?.asset_issuer;
+
+  // Example on how to get the pools, TODO: Make it so it can do an infinite scroll... more details in Issue #3
+  const aa = usePoolsForAsset(asset);
+  console.log("🚀 « aa:", aa);
 
   return (
     <Grid
@@ -114,9 +122,21 @@ export default function Asset() {
                   spacing={2}
                   width="100%"
                 >
-                  <Text>
-                    <strong>Issuer:</strong> {shortenAddress(issuer)}
-                  </Text>
+                  <Tooltip label="Copy to clipboard" openDelay={500}>
+                    <HStack
+                      cursor={"pointer"}
+                      onClick={() =>
+                        copyToClipboard(
+                          issuer,
+                          `${asset?.code} address copied!`
+                        )
+                      }
+                    >
+                      <Text>
+                        <strong>Issuer:</strong> {shortenAddress(issuer)}
+                      </Text>
+                    </HStack>
+                  </Tooltip>
                   <Text>
                     <strong>Decimals:</strong> {asset?.decimals}
                   </Text>
@@ -132,13 +152,25 @@ export default function Asset() {
                 </SimpleGrid>
 
                 <HStack spacing={2}>
-                  <Link href="#" fontSize="sm">
+                  <Link
+                    href={`https://stellar.expert/explorer/public/asset/${asset?.code}-${asset?.issuer}`}
+                    target="_blank"
+                    fontSize="sm"
+                  >
                     See on stellar.expert
                   </Link>
-                  <Link href="#" fontSize="sm">
+                  <Link
+                    href={`https://stellarchain.io/assets/${asset?.code}-${asset?.issuer}`}
+                    target="_blank"
+                    fontSize="sm"
+                  >
                     See on stellarchain.io
                   </Link>
-                  <Link href="#" fontSize="sm">
+                  <Link
+                    href={`https://app.soroswap.finance/swap/${asset?.contract}`}
+                    target="_blank"
+                    fontSize="sm"
+                  >
                     Swap on soroswap
                   </Link>
                 </HStack>

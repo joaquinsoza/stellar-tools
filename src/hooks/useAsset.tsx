@@ -1,7 +1,15 @@
-import { Asset } from "@stellar-asset-lists/sdk";
+import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 import { useMergedAssetLists } from "./useMergedAssetsList";
 import { useAccountBalances } from "./useBalances";
 import { useEffect, useState } from "react";
+import { AssetRecord } from "@stellar/stellar-sdk/lib/horizon/types/assets";
+import { Asset, Horizon } from "@stellar/stellar-sdk";
+import { useSorobanReact } from "@soroban-react/core";
+import {
+  getTokenDecimals,
+  getTokenName,
+  getTokenSymbol,
+} from "@/helpers/soroban";
 
 type MyBalanceLineAsset = {
   balance: string;
@@ -21,28 +29,113 @@ export interface UseAssetProps {
   issuer?: string;
 }
 
+interface ExtendedAssetRecord extends AssetRecord {
+  toml?: () => Promise<any>;
+}
+
 export function useAsset({
   contract,
   code,
   issuer,
-}: UseAssetProps): Asset | undefined {
+}: UseAssetProps): AssetType | undefined {
+  const sorobanContext = useSorobanReact();
   const { assets } = useMergedAssetLists();
+  const [asset, setAsset] = useState<AssetType | undefined>(undefined);
 
-  // If a contract address is provided, find the asset by contract.
-  if (contract) {
-    return assets?.find((ast) => ast.contract === contract);
-  }
+  useEffect(() => {
+    const fetchAssetMetadata = async () => {
+      if (contract) {
+        const foundAsset = assets?.find((ast) => ast.contract === contract);
+        if (foundAsset) {
+          setAsset(foundAsset);
+          return;
+        }
 
-  // If a code and issuer pair is provided, find the asset by code and issuer.
-  if (code && issuer) {
-    return assets?.find((ast) => ast.code === code && ast.issuer === issuer);
-  }
+        try {
+          let tokenCode, tokenIssuer;
+          const tokenName = await getTokenName(sorobanContext, contract);
+          if (tokenName?.includes(":")) {
+            const [tokenCodeFromBlockchain, tokenIssuerFromBlockchain] =
+              tokenName.split(/[:]/);
+            tokenCode = tokenCodeFromBlockchain;
+            tokenIssuer = tokenIssuerFromBlockchain;
+          } else {
+            tokenCode = await getTokenSymbol(sorobanContext, contract);
+          }
+          setAsset({
+            name: tokenName ?? "",
+            code: tokenCode ?? "",
+            issuer: tokenIssuer ?? "",
+            contract: contract,
+            org: "",
+            domain: "",
+            icon: "",
+            decimals: await getTokenDecimals(sorobanContext, contract),
+          });
+        } catch (error) {}
+      }
 
-  // If neither is found, return undefined. TODO: Should look the token in the blockchain
-  return undefined;
+      if (code && issuer) {
+        const foundAsset = assets?.find(
+          (ast) => ast.code === code && ast.issuer === issuer
+        );
+        if (foundAsset) {
+          setAsset(foundAsset);
+          return;
+        }
+
+        // Fetch from blockchain if not found in the local list
+        try {
+          const server = new Horizon.Server("https://horizon.stellar.org");
+          const response = await server
+            .assets()
+            .forCode(code)
+            .forIssuer(issuer)
+            .call();
+          if (response.records.length > 0) {
+            const assetMetadata = response.records[0] as ExtendedAssetRecord;
+            // TODO: Should Fetch TOML data (getting cors error with some assets eg. ZI-GDBNNE67F54PTUZTCTOQYT5CQZFXA2AX6O5DCA5BVR653OP6KCWGG2Z7)
+            // if (assetMetadata.toml) {
+            //   try {
+            //     const tomlData = await assetMetadata.toml();
+            //     console.log("TOML Data:", tomlData);
+            //   } catch (tomlError) {
+            //     console.error("Error fetching TOML data:", tomlError);
+            //   }
+            // }
+            let tempContract: any = new Asset(
+              assetMetadata.asset_code,
+              assetMetadata.asset_issuer
+            );
+            tempContract = tempContract.contractId(
+              sorobanContext.activeChain?.networkPassphrase ?? ""
+            );
+            setAsset({
+              name: assetMetadata.asset_code,
+              code: assetMetadata.asset_code,
+              issuer: assetMetadata.asset_issuer,
+              contract: tempContract,
+              org: "",
+              domain: "",
+              icon: "",
+              decimals: 7,
+            });
+          } else {
+            console.log("Asset not found.");
+          }
+        } catch (error) {
+          console.error("Error fetching asset metadata:", error);
+        }
+      }
+    };
+
+    fetchAssetMetadata();
+  }, [contract, code, issuer, assets, sorobanContext]);
+
+  return asset;
 }
 
-export const useAssetForAccount = (asset?: Asset) => {
+export const useAssetForAccount = (asset?: AssetType) => {
   const { balances, isLoading, isError } = useAccountBalances();
 
   const [assetForAccount, setAssetForAccount] = useState<any>(null);
