@@ -4,6 +4,7 @@ import _ from "lodash";
 import * as StellarAssetListsSdk from "@stellar-asset-lists/sdk";
 import { Asset, Networks } from "@stellar/stellar-sdk";
 import { xlmAsset } from "@/components/constants/xlmAsset";
+import { isAddress } from "@/helpers/address";
 
 export function useMergedAssetLists() {
   // Fetch the catalogue using SWR.
@@ -23,7 +24,11 @@ export function useMergedAssetLists() {
 
       // Enhance assets without a contract.
       mergedAssets = mergedAssets.map((asset) => {
-        if (!asset.contract && asset.code && asset.issuer) {
+        if (
+          (!asset.contract || !isAddress(asset.contract)) &&
+          asset.code &&
+          asset.issuer
+        ) {
           try {
             const newAsset = new Asset(asset.code, asset.issuer);
             const contract = newAsset.contractId(Networks.PUBLIC);
