@@ -1,6 +1,7 @@
 "use client";
 import { AssetActionPanel } from "@/components/Assets/AssetActionPanel";
 import { AssetCard } from "@/components/Assets/AssetCard";
+import { DexPoolTable } from "@/components/Assets/pools/DexPoolTable";
 import { ManageTrustlineButton } from "@/components/Buttons/ManageTrustlineButton";
 import { CommingSoon } from "@/components/DisabledComponents/CommingSoon";
 import { ConnectWalletToUse } from "@/components/DisabledComponents/ConnectWalletToUse";
@@ -177,7 +178,9 @@ export default function Asset() {
               </VStack>
             </TabPanel>
 
-            <TabPanel>List of pools will be available soon</TabPanel>
+            <TabPanel>
+              {asset && <DexPoolTable asset={asset!}></DexPoolTable>}
+            </TabPanel>
           </TabPanels>
         </Tabs>
       </GridItem>
