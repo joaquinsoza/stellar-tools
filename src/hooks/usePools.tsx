@@ -1,16 +1,15 @@
-import { useSorobanReact } from "@soroban-react/core";
-import { Asset } from "@stellar/stellar-sdk";
 import { useEffect, useState } from "react";
-import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 import { Pool } from "@/common/types/types";
+import { ServerApi } from "@stellar/stellar-sdk/lib/horizon/server_api";
 
-export function usePoolsForAsset(asset: AssetType) {
-  const { serverHorizon } = useSorobanReact();
+//TODO: improve reusability
+export function usePoolsForAsset(
+  call:
+    | Promise<ServerApi.CollectionPage<ServerApi.LiquidityPoolRecord>>
+    | undefined
+) {
   const [pools, setPools] = useState<Pool[]>([]);
-  const newAsset = new Asset(asset?.code, asset?.issuer);
-  const [next, setNext] = useState(() =>
-    serverHorizon?.liquidityPools().forAssets(newAsset).call()
-  );
+  const [next, setNext] = useState(() => call);
   const [loading, setLoading] = useState(false);
 
   const loadMore = async () => {
@@ -53,5 +52,6 @@ export function usePoolsForAsset(asset: AssetType) {
   useEffect(() => {
     loadMore();
   }, []);
+
   return { pools, loading, loadMore };
 }

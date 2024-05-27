@@ -14,20 +14,29 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { usePoolsForAsset } from "@/hooks/usePools";
-import { Asset } from "@stellar-asset-lists/sdk";
 import React, { useEffect, useRef } from "react";
 import {
   generateStellarXUrl,
   getAssetPair,
   calculatePrice,
 } from "@/components/utils/Assets/Pool";
+import { useSorobanReact } from "@soroban-react/core";
+import { Asset } from "@stellar/stellar-sdk";
+
+import { ServerApi } from "@stellar/stellar-sdk/lib/horizon/server_api";
+import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 
 type DexPoolTableProps = {
-  asset: Asset;
+  asset: AssetType;
 };
 
 export const DexPoolTable = ({ asset }: DexPoolTableProps) => {
-  const { pools, loading, loadMore } = usePoolsForAsset(asset);
+  const { serverHorizon } = useSorobanReact();
+  const newAsset = new Asset(asset?.code, asset?.issuer);
+  const call = serverHorizon?.liquidityPools().forAssets(newAsset).call();
+  const { pools, loading, loadMore } = usePoolsForAsset(
+    call as Promise<ServerApi.CollectionPage<ServerApi.LiquidityPoolRecord>>
+  );
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isInitialLoad, setIsInitialLoad] = React.useState(true);
 

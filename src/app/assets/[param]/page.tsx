@@ -1,18 +1,17 @@
 "use client";
 import { AssetActionPanel } from "@/components/Assets/AssetActionPanel";
 import { AssetCard } from "@/components/Assets/AssetCard";
-import { DexPoolTable } from "@/components/Assets/pools/DexPoolTable";
+import { DexPoolTable } from "@/components/Assets/Pools/DexPoolTable";
 import { ManageTrustlineButton } from "@/components/Buttons/ManageTrustlineButton";
 import { CommingSoon } from "@/components/DisabledComponents/CommingSoon";
 import { ConnectWalletToUse } from "@/components/DisabledComponents/ConnectWalletToUse";
 import { isAddress, isCodeIssuerPair, shortenAddress } from "@/helpers/address";
-import { UseAssetProps, useAsset, useAssetForAccount } from "@/hooks/useAsset";
+import { UseAssetProps, useAsset } from "@/hooks/useAsset";
 import {
   UseAssetInformationProps,
   useAssetInformation,
 } from "@/hooks/useAssetInformation";
 import { useClipboard } from "@/hooks/useClipboard";
-import { usePoolsForAsset } from "@/hooks/usePools";
 import {
   Box,
   VStack,
@@ -35,6 +34,23 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { useParams } from "next/navigation";
+import { Asset as AssetType } from "@stellar-asset-lists/sdk";
+
+type PoolsTable = {
+  asset?: AssetType;
+};
+
+const PoolsTable = ({ asset }: PoolsTable) => {
+  return (
+    <TabPanel>
+      {asset ? (
+        <DexPoolTable asset={asset} />
+      ) : (
+        <Text>Select an asset to view pools.</Text>
+      )}
+    </TabPanel>
+  );
+};
 
 export default function Asset() {
   const copyToClipboard = useClipboard();
@@ -65,8 +81,6 @@ export default function Asset() {
   const issuer = asset?.issuer ? asset.issuer : assetInformation?.asset_issuer;
 
   // Example on how to get the pools, TODO: Make it so it can do an infinite scroll... more details in Issue #3
-  const aa = usePoolsForAsset(asset);
-  console.log("🚀 « aa:", aa);
 
   return (
     <Grid
@@ -178,9 +192,7 @@ export default function Asset() {
               </VStack>
             </TabPanel>
 
-            <TabPanel>
-              {asset && <DexPoolTable asset={asset!}></DexPoolTable>}
-            </TabPanel>
+            <PoolsTable asset={asset!} />
           </TabPanels>
         </Tabs>
       </GridItem>
