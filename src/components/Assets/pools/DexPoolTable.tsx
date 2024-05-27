@@ -13,51 +13,21 @@ import {
   Image,
   Button,
 } from "@chakra-ui/react";
-import { usePoolsTest3 } from "@/hooks/usePools";
+import { usePoolsForAsset } from "@/hooks/usePools";
 import { Asset } from "@stellar-asset-lists/sdk";
 import React, { useEffect, useRef } from "react";
+import {
+  generateStellarXUrl,
+  getAssetPair,
+  calculatePrice,
+} from "@/components/utils/Assets/Pool";
 
 type DexPoolTableProps = {
   asset: Asset;
 };
 
-type reserve = {
-  asset: string;
-  amount: string;
-};
-
-const getAssetPair = (reserves: reserve[]) => {
-  const assets = reserves.map((reserve: reserve) => reserve.asset);
-  const mainAsset = assets[0]
-    ? assets[0] === "native"
-      ? "XLM"
-      : assets[0]
-    : "";
-  const secondaryAsset = assets[1].split(":")[0];
-  return mainAsset + "/" + secondaryAsset;
-};
-
-const calculatePrice = (reserves: reserve[]) => {
-  const [mainReserve, secondaryReserve] = reserves;
-  const amountsAreValid =
-    !isNaN(parseFloat(mainReserve.amount)) &&
-    !isNaN(parseFloat(secondaryReserve.amount));
-  const secondaryReserveIsNotZero = parseFloat(secondaryReserve.amount) !== 0;
-
-  if (amountsAreValid && secondaryReserveIsNotZero) {
-    const price =
-      parseFloat(mainReserve.amount) / parseFloat(secondaryReserve.amount);
-    return price.toFixed(2);
-  } else return 0;
-};
-
-const generateStellarXUrl = (reserves: reserve[]) => {
-  const [mainReserve, secondaryReserve] = reserves;
-  return `https://stellarx.com/markets/${mainReserve.asset}/${secondaryReserve.asset}`;
-};
-
 export const DexPoolTable = ({ asset }: DexPoolTableProps) => {
-  const { pools, loading, loadMore } = usePoolsTest3(asset);
+  const { pools, loading, loadMore } = usePoolsForAsset(asset);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isInitialLoad, setIsInitialLoad] = React.useState(true);
 
