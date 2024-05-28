@@ -51,6 +51,7 @@ export function usePoolsForAsset(
 
   useEffect(() => {
     loadMore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { pools, loading, loadMore };

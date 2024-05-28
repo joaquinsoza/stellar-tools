@@ -50,12 +50,15 @@ export const DexPoolTable = ({ asset }: DexPoolTableProps) => {
   };
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.addEventListener("scroll", handleScroll);
+    const currentScrollRef = scrollRef.current;
+
+    if (currentScrollRef) {
+      currentScrollRef.addEventListener("scroll", handleScroll);
       return () => {
-        scrollRef.current?.removeEventListener("scroll", handleScroll);
+        currentScrollRef.removeEventListener("scroll", handleScroll);
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, loadMore]);
 
   useEffect(() => {
