@@ -34,7 +34,7 @@ import {
 } from "@chakra-ui/react";
 import { useParams } from "next/navigation";
 import { Asset as AssetType } from "@stellar-asset-lists/sdk";
-import { DexPoolTable } from "../../../components/Assets/Pools/DexPoolTable";
+import { DexPoolTable } from "@/components/Assets/pools/DexPoolTable";
 
 type PoolsTable = {
   asset?: AssetType;
