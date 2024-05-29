@@ -1,7 +1,6 @@
 "use client";
 import { AssetActionPanel } from "@/components/Assets/AssetActionPanel";
 import { AssetCard } from "@/components/Assets/AssetCard";
-import { DexPoolTable } from "@/components/Assets/Pools/DexPoolTable";
 import { ManageTrustlineButton } from "@/components/Buttons/ManageTrustlineButton";
 import { CommingSoon } from "@/components/DisabledComponents/CommingSoon";
 import { ConnectWalletToUse } from "@/components/DisabledComponents/ConnectWalletToUse";
@@ -35,6 +34,7 @@ import {
 } from "@chakra-ui/react";
 import { useParams } from "next/navigation";
 import { Asset as AssetType } from "@stellar-asset-lists/sdk";
+import { DexPoolTable } from "../../../components/Assets/Pools/DexPoolTable";
 
 type PoolsTable = {
   asset?: AssetType;
