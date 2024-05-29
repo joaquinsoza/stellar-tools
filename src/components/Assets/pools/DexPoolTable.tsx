@@ -30,7 +30,7 @@ type DexPoolTableProps = {
   asset: AssetType;
 };
 
-export const DexPoolTable = ({ asset }: DexPoolTableProps) => {
+export function DexPoolTable({ asset }: DexPoolTableProps) {
   const { serverHorizon } = useSorobanReact();
   const newAsset = new Asset(asset?.code, asset?.issuer);
   const call = serverHorizon?.liquidityPools().forAssets(newAsset).call();
@@ -148,4 +148,4 @@ export const DexPoolTable = ({ asset }: DexPoolTableProps) => {
       )}
     </Box>
   );
-};
+}
