@@ -1,31 +1,28 @@
-import { useSorobanReact } from "@soroban-react/core";
-import { Asset, Horizon } from "@stellar/stellar-sdk";
 import { useEffect, useState } from "react";
-import { Asset as AssetType } from "@stellar-asset-lists/sdk";
+import { Pool } from "@/common/types/types";
+import { ServerApi } from "@stellar/stellar-sdk/lib/horizon/server_api";
 
-interface Pool {
-  id: string;
-  fee: number;
-  type: string;
-  total_shares: string;
-  reserves: Array<{ asset: string; amount: string }>;
-}
+//TODO: improve reusability
+export function usePoolsForAsset(
+  call:
+    | Promise<ServerApi.CollectionPage<ServerApi.LiquidityPoolRecord>>
+    | undefined
+) {
+  const [pools, setPools] = useState<Pool[]>([]);
+  const [next, setNext] = useState(() => call);
+  const [loading, setLoading] = useState(false);
 
-export function usePoolsForAsset(asset?: AssetType): Pool[] | undefined {
-  const { serverHorizon } = useSorobanReact();
-  const [pools, setPools] = useState<Pool[] | undefined>(undefined);
+  const loadMore = async () => {
+    if (loading || !next) {
+      return;
+    }
 
-  useEffect(() => {
-    const fetchPoolsForAsset = async () => {
-      try {
-        if (!asset) return;
-        const newAsset = new Asset(asset.code, asset.issuer);
-        const response = await serverHorizon
-          ?.liquidityPools()
-          .forAssets(newAsset)
-          .call();
+    setLoading(true);
+    try {
+      const response = await next;
 
-        const poolsData = response?.records.map((record) => ({
+      setPools((prevPools) => {
+        const newPools = response.records.map((record) => ({
           id: record.id,
           fee: record.fee_bp,
           type: record.type,
@@ -36,14 +33,26 @@ export function usePoolsForAsset(asset?: AssetType): Pool[] | undefined {
           })),
         }));
 
-        setPools(poolsData);
-      } catch (error) {
-        console.error("Error fetching pools for asset:", error);
-      }
-    };
+        const uniquePools = Array.from(
+          new Set([
+            ...prevPools.map((pool) => JSON.stringify(pool)),
+            ...newPools.map((pool) => JSON.stringify(pool)),
+          ])
+        );
 
-    fetchPoolsForAsset();
-  }, [asset, serverHorizon]);
+        return uniquePools.map((pool) => JSON.parse(pool));
+      });
+      setNext(response.next);
+    } catch (error) {
+      console.error("Error loading pools:", error);
+    }
+    setLoading(false);
+  };
 
-  return pools;
+  useEffect(() => {
+    loadMore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return { pools, loading, loadMore };
 }
