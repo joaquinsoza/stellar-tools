@@ -19,19 +19,26 @@ import Link from "next/link";
 import { FaDiscord, FaGithub } from "react-icons/fa";
 import { NavItem } from "./NavItem";
 import { SidebarContext } from "@/context/sidebar/SidebarContext";
-import { IoContract } from "react-icons/io5";
+import { IoContract, IoReceiptOutline } from "react-icons/io5";
 import { RiContractLine } from "react-icons/ri";
 
 interface LinkItemProps {
   name: string;
   icon: IconType;
   href: string;
+  requiresWallet?: boolean;
 }
 
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, href: "/" },
   { name: "Assets", icon: BiCoinStack, href: "/assets" },
   { name: "Contracts", icon: RiContractLine, href: "/contracts" },
+  {
+    name: "Transactions",
+    icon: IoReceiptOutline,
+    href: "/transactions",
+    requiresWallet: true,
+  },
 ];
 
 interface SidebarProps extends BoxProps {
@@ -92,6 +99,7 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             key={link.name}
             icon={link.icon}
             href={link.href}
+            requiresWallet={link.requiresWallet}
             overflow={"hidden"}
             onClick={onClose}
           >
