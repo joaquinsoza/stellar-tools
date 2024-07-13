@@ -12,6 +12,7 @@ import {
   Tooltip,
   Skeleton,
   useMediaQuery,
+  Box,
 } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { BiCopy } from "react-icons/bi";
@@ -35,19 +36,13 @@ export function AssetCard({
   const [isMobile] = useMediaQuery("(max-width: 768px)");
 
   return (
-    <Card rounded={"2xl"} width={"100%"}>
+    <Card rounded={"2xl"} width={"100%"} variant="elevated">
       <CardBody>
         <HStack alignItems={"center"}>
           <Skeleton isLoaded={Boolean(icon)} fadeDuration={1} rounded={"full"}>
             <Avatar name={name} src={icon} size={{ base: "lg", md: "2xl" }} />
           </Skeleton>
-          <VStack
-            align={"start"}
-            gap={{ base: 0, md: 2 }}
-            borderLeftWidth="2px"
-            borderLeftColor={"gray.200"}
-            pl={2}
-          >
+          <Box>
             <Skeleton
               height={{ base: "30px", md: 9 }}
               isLoaded={Boolean(name)}
@@ -73,6 +68,15 @@ export function AssetCard({
                 {domain ?? "Asset Domain"}
               </Link>
             </Skeleton>
+          </Box>
+          <VStack
+            align={"start"}
+            gap={{ base: 0, md: 2 }}
+            borderLeftWidth="2px"
+            borderLeftColor={"gray.200"}
+            pl={2}
+            width="full"
+          >
             <Skeleton isLoaded={Boolean(contract)} fadeDuration={1} height={6}>
               <Tooltip label="Copy to clipboard" openDelay={500}>
                 <HStack
@@ -82,8 +86,9 @@ export function AssetCard({
                     copyToClipboard(contract, `${code} address copied!`)
                   }
                 >
-                  <BiCopy />
-                  <Text>{shortenAddress(contract!)}</Text>
+                  <Text width="full">
+                    <BiCopy /> {shortenAddress(contract!)}
+                  </Text>
                 </HStack>
               </Tooltip>
             </Skeleton>
