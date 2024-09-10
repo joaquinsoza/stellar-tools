@@ -13,9 +13,13 @@ export function useMergedAssetLists() {
     StellarAssetListsSdk.fetchAvailableAssetLists
   );
 
+  const filteredCatalogue = catalogue?.filter(
+    (entry) => entry.name !== "Lobstr Curated List"
+  );
+
   // Once the catalogue is available, fetch all asset lists and merge them.
   const { data, error: assetListsError } = useSWR(
-    () => catalogue?.map((entry) => entry.url),
+    () => filteredCatalogue?.map((entry) => entry.url),
     async (urls) => {
       const lists = await Promise.all(
         urls.map(StellarAssetListsSdk.fetchAssetList)
