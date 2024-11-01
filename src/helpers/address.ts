@@ -19,3 +19,7 @@ export function isCodeIssuerPair(input: string) {
   if (!input) return;
   return input.includes("-") || input.includes(":");
 }
+
+export function shortenText(text: string, chars = 4): string {
+  return `${text.substring(0, chars)}...${text.substring(text.length - chars)}`;
+}

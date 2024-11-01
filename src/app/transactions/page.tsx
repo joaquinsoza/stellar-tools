@@ -21,7 +21,7 @@ import {
 import { useMergedAssetLists } from "@/hooks/useMergedAssetsList";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { shortenAddress } from "@/helpers/address";
+import { shortenAddress, shortenText } from "@/helpers/address";
 import { Asset } from "@stellar-asset-lists/sdk";
 import {
   getAccountHistory,
@@ -81,7 +81,6 @@ const Pagination = ({
 };
 
 const PaymentsTable = ({ payments }: { payments: any[] | undefined }) => {
-  console.log("🚀 « payments:", payments);
   const [assetsPerPage, setAssetsPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobile] = useMediaQuery("(max-width: 768px)");
@@ -109,7 +108,11 @@ const PaymentsTable = ({ payments }: { payments: any[] | undefined }) => {
             ) : (
               <>
                 <Th>Date</Th>
+                <Th>Type</Th>
                 <Th>Code</Th>
+                <Th>From</Th>
+                <Th>To</Th>
+                <Th>Amount</Th>
                 <Th>TxHash</Th>
               </>
             )}
@@ -117,9 +120,17 @@ const PaymentsTable = ({ payments }: { payments: any[] | undefined }) => {
         </Thead>
         <Tbody>
           {currentPayments.map((payment) => {
+            const created_at = new Date(payment.created_at).toLocaleString(
+              undefined,
+              {
+                day: "numeric",
+                month: "short",
+                year: "2-digit",
+              }
+            );
             return (
               <Tr
-                key={payment.contract || `${payment.code}-${payment.issuer}`}
+                key={payment.id}
                 onClick={() =>
                   window.open(
                     `https://stellar.expert/explorer/public/tx/${payment.transaction_hash}`
@@ -131,15 +142,27 @@ const PaymentsTable = ({ payments }: { payments: any[] | undefined }) => {
               >
                 {isMobile ? (
                   <>
-                    <Td>{payment.created_at}</Td>
-                    <Td>{payment.asset_code}</Td>
+                    <Td>{created_at}</Td>
+                    <Td>
+                      {payment.asset_type === "native"
+                        ? "XLM"
+                        : payment.asset_code}
+                    </Td>
                     <Td>{payment.transaction_hash}</Td>
                   </>
                 ) : (
                   <>
-                    <Td>{payment.created_at}</Td>
-                    <Td>{payment.asset_code}</Td>
-                    <Td>{payment.transaction_hash}</Td>
+                    <Td>{created_at}</Td>
+                    <Td>{payment.type}</Td>
+                    <Td>
+                      {payment.asset_type === "native"
+                        ? "XLM"
+                        : payment.asset_code}
+                    </Td>
+                    <Td>{shortenAddress(payment.from)}</Td>
+                    <Td>{shortenAddress(payment.to)}</Td>
+                    <Td>{payment.amount}</Td>
+                    <Td>{shortenText(payment.transaction_hash)}</Td>
                   </>
                 )}
               </Tr>

@@ -33,7 +33,6 @@ export async function getAccountHistory(
   //   if (transactionPage.records.length < 200) break;
   //   transactionPage = await transactionPage.next();
   // }
-  console.log("🚀 « serverHorizon:", serverHorizon);
 
   let operationPage = await serverHorizon
     .operations()
