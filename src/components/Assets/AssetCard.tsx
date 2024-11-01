@@ -19,10 +19,12 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
-import { useMemo } from "react";
 import { BiCopy } from "react-icons/bi";
 import { IoChevronDown } from "react-icons/io5";
+import { Divider } from "@chakra-ui/react";
+import { Center } from "@chakra-ui/react";
 
+const SOROSWAP_URL: string = "https://app.soroswap.finance/swap/";
 interface AssetCardProps {
   name?: string;
   icon?: string;
@@ -39,12 +41,15 @@ export function AssetCard({
   domain,
 }: AssetCardProps) {
   const copyToClipboard = useClipboard();
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
+
+  const handleRedirectToExternalLink = (url: string, params: string) => {
+    window.open(url + `${params}`, "_blank");
+  };
 
   return (
     <Card rounded={"2xl"} width={"100%"} variant="elevated">
       <CardBody>
-        <HStack>
+        <HStack justifyContent="space-between">
           <HStack alignItems={"center"}>
             <Skeleton
               isLoaded={Boolean(icon)}
@@ -91,55 +96,51 @@ export function AssetCard({
               </Skeleton>
             </Box>
           </HStack>
-          <HStack>
-            <Box>
-              <VStack>
-                <HStack>
-                  <Menu>
-                    <MenuButton as={Button} rightIcon={<IoChevronDown />}>
-                      See on
-                    </MenuButton>
-                    <MenuList>
-                      <MenuItem>Download</MenuItem>
-                      <MenuItem>Create a Copy</MenuItem>
-                    </MenuList>
-                  </Menu>
-                  <Button
-                    colorScheme="pink"
-                    variant="solid"
-                    // onClick={onClick}
-                    // isLoading={isLoading}
-                  >
-                    Swap on Soroswap
-                  </Button>
-                </HStack>
-              </VStack>
-            </Box>
-          </HStack>
-          {/* <VStack
-            align={"start"}
-            gap={{ base: 0, md: 2 }}
-            borderLeftWidth="2px"
-            borderLeftColor={"gray.200"}
-            pl={2}
-            width="full"
-          >
-            <Skeleton isLoaded={Boolean(contract)} fadeDuration={1} height={6}>
-              <Tooltip label="Copy to clipboard" openDelay={500}>
-                <HStack
-                  cursor={"pointer"}
-                  color="gray.500"
+          <Center height="80px">
+            <Divider orientation="vertical" borderWidth={1} />
+          </Center>
+          <HStack alignItems={"center"}>
+            <VStack>
+              <HStack>
+                <Menu>
+                  <MenuButton as={Button} rightIcon={<IoChevronDown />}>
+                    See on
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem>Stellar chain</MenuItem>
+                    <MenuItem>Stellar expert/</MenuItem>
+                  </MenuList>
+                </Menu>
+                <Button
+                  colorScheme="pink"
+                  variant="solid"
                   onClick={() =>
-                    copyToClipboard(contract, `${code} address copied!`)
+                    handleRedirectToExternalLink(SOROSWAP_URL, contract!)
                   }
                 >
-                  <Text width="full">
-                    <BiCopy /> {shortenAddress(contract!)}
-                  </Text>
-                </HStack>
-              </Tooltip>
-            </Skeleton>
-          </VStack> */}
+                  Swap on Soroswap
+                </Button>
+              </HStack>
+
+              <VStack
+                cursor={"pointer"}
+                color="gray.500"
+                onClick={() =>
+                  copyToClipboard(contract, `${code} address copied!`)
+                }
+              >
+                <Tooltip label="Copy to clipboard" openDelay={500}>
+                  <HStack spacing={2}>
+                    <Text>CONTRACT ID:</Text>
+                    <BiCopy />
+                    <Text display="inline-block">
+                      {shortenAddress(contract!)}
+                    </Text>
+                  </HStack>
+                </Tooltip>
+              </VStack>
+            </VStack>
+          </HStack>
         </HStack>
       </CardBody>
     </Card>
