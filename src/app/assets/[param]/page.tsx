@@ -108,6 +108,7 @@ export default function Asset() {
           code={asset?.code}
           contract={asset?.contract}
           domain={asset?.domain}
+          issuer={issuer}
         />
       </GridItem>
       <GridItem gridArea="actions">
