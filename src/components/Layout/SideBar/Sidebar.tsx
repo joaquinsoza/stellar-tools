@@ -8,6 +8,7 @@ import {
   BoxProps,
   VStack,
   HStack,
+  Text,
   Heading,
 } from "@chakra-ui/react";
 import { FiHome } from "react-icons/fi";
@@ -21,6 +22,8 @@ import { NavItem } from "./NavItem";
 import { SidebarContext } from "@/context/sidebar/SidebarContext";
 import { IoContract, IoReceiptOutline } from "react-icons/io5";
 import { RiContractLine } from "react-icons/ri";
+import { GiToken } from "react-icons/gi";
+import { MdOutlineGeneratingTokens, MdToken } from "react-icons/md";
 
 interface LinkItemProps {
   name: string;
@@ -32,6 +35,11 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, href: "/" },
   { name: "Assets", icon: BiCoinStack, href: "/assets" },
+  {
+    name: "Create Token",
+    icon: MdOutlineGeneratingTokens,
+    href: "/create-token",
+  },
   { name: "Contracts", icon: RiContractLine, href: "/contracts" },
   {
     name: "Transactions",
@@ -103,7 +111,7 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             overflow={"hidden"}
             onClick={onClose}
           >
-            {link.name}
+            <Text isTruncated>{link.name}</Text>
           </NavItem>
         ))}
       </Box>
