@@ -25,12 +25,17 @@ import { Divider } from "@chakra-ui/react";
 import { Center } from "@chakra-ui/react";
 
 const SOROSWAP_URL: string = "https://app.soroswap.finance/swap/";
+const STELLAR_CHAIN_URL: string = "https://stellarchain.io/assets/";
+const STELLAR_EXPERT_URL: string =
+  "https://stellar.expert/explorer/public/asset/";
+
 interface AssetCardProps {
   name?: string;
   icon?: string;
   code?: string;
   contract?: string;
   domain?: string;
+  issuer?: string;
 }
 
 export function AssetCard({
@@ -39,9 +44,10 @@ export function AssetCard({
   code,
   contract,
   domain,
+  issuer,
 }: AssetCardProps) {
   const copyToClipboard = useClipboard();
-
+  const stellarParams = `${code}-${issuer}`;
   const handleRedirectToExternalLink = (url: string, params: string) => {
     window.open(url + `${params}`, "_blank");
   };
@@ -107,8 +113,26 @@ export function AssetCard({
                     See on
                   </MenuButton>
                   <MenuList>
-                    <MenuItem>Stellar chain</MenuItem>
-                    <MenuItem>Stellar expert/</MenuItem>
+                    <MenuItem
+                      onClick={() =>
+                        handleRedirectToExternalLink(
+                          STELLAR_CHAIN_URL,
+                          stellarParams
+                        )
+                      }
+                    >
+                      Stellar chain
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() =>
+                        handleRedirectToExternalLink(
+                          STELLAR_EXPERT_URL,
+                          stellarParams
+                        )
+                      }
+                    >
+                      Stellar expert
+                    </MenuItem>
                   </MenuList>
                 </Menu>
                 <Button
