@@ -16,13 +16,6 @@ import {
   xdr,
 } from "@stellar/stellar-sdk";
 
-type txResponse =
-  | SorobanRpc.Api.SendTransactionResponse
-  | SorobanRpc.Api.GetTransactionResponse;
-type txStatus =
-  | SorobanRpc.Api.SendTransactionStatus
-  | SorobanRpc.Api.GetTransactionStatus;
-
 // Get the tokens symbol, decoded as a string
 export const getTokenSymbol = async (
   sorobanContext: SorobanContextType,
@@ -205,18 +198,19 @@ export async function invokeTransaction(
   const tx_hash = prepped_tx.hash().toString("hex");
 
   console.log("submitting tx...");
-  let response: txResponse = await server.sendTransaction(prepped_tx);
-  let status: txStatus = response.status;
+  let response = await server.sendTransaction(prepped_tx);
+  let newResponse;
+  let status: string = response.status;
   console.log(`Hash: ${tx_hash}`);
   // Poll this until the status is not "NOT_FOUND"
-  while (status === "PENDING" || status === "NOT_FOUND") {
+  while (status === "PENDING") {
     // See if the transaction is complete
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 4000));
     console.log("checking tx...");
-    response = await server.getTransaction(tx_hash);
-    status = response.status;
+    newResponse = await server.getTransaction(tx_hash);
+    status = newResponse.status;
   }
-  return response;
+  return newResponse;
 }
 
 export const bumpContractInstance = async (
@@ -248,7 +242,9 @@ export const bumpContractInstance = async (
   });
 
   const txBuilder = await createTxBuilder(sorobanContext);
-  txBuilder.addOperation(Operation.extendFootprintTtl({ extendTo: 535670 })); // 1 year
+  txBuilder.addOperation(
+    Operation.extendFootprintTtl({ extendTo: 3110400 - 1 })
+  ); // 1 year
   txBuilder.setSorobanData(bumpTransactionData);
   const result = await invokeTransaction(
     txBuilder.build(),
@@ -257,6 +253,7 @@ export const bumpContractInstance = async (
   );
   // @ts-ignore
   console.log(result.status, "\n");
+  return result;
 };
 
 export const restoreContract = async (

@@ -22,7 +22,7 @@ export const ConnectWalletToUse = () => {
     >
       <Card bg={"Background"} rounded={"2xl"} textAlign={"center"} p={4}>
         <VStack spacing={2}>
-          <Text fontSize="xl">Get the Full Experience</Text>
+          {/* <Text fontSize="xl">Connect Wallet to use</Text> */}
           <ConnectWalletButton />
         </VStack>
       </Card>
