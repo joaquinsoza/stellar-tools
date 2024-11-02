@@ -125,6 +125,7 @@ export default function Asset() {
           <TabList>
             <Tab>Info</Tab>
             <Tab>Pools</Tab>
+            <Tab>Transactions</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -136,6 +137,7 @@ export default function Asset() {
             </TabPanel>
             <PoolsTable asset={asset!} />
           </TabPanels>
+          <TabPanels>Coming soon</TabPanels>
         </Tabs>
       </GridItem>
       <GridItem gridArea="transactions">
