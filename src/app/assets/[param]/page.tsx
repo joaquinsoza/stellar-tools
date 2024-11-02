@@ -108,6 +108,7 @@ export default function Asset() {
           code={asset?.code}
           contract={asset?.contract}
           domain={asset?.domain}
+          issuer={issuer}
         />
       </GridItem>
       <GridItem gridArea="actions">
@@ -124,6 +125,7 @@ export default function Asset() {
           <TabList>
             <Tab>Info</Tab>
             <Tab>Pools</Tab>
+            <Tab>Transactions</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -134,6 +136,7 @@ export default function Asset() {
               />
             </TabPanel>
             <PoolsTable asset={asset!} />
+            <TabPanel>Coming soon</TabPanel>
           </TabPanels>
         </Tabs>
       </GridItem>

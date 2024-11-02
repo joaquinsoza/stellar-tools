@@ -1,17 +1,9 @@
-import {
-  VStack,
-  Text,
-  SimpleGrid,
-  HStack,
-  Link,
-  Tooltip,
-  Image,
-} from "@chakra-ui/react";
-import { shortenAddress } from "@/helpers/address";
-import { useClipboard } from "@/hooks/useClipboard";
 import { FC } from "react";
+import { VStack, Text, SimpleGrid } from "@chakra-ui/react";
+import { shortenAddress } from "@/helpers/address";
 import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 import { InfoCard } from "./InfoCard";
+
 type AssetInfoProps = {
   asset: AssetType;
   assetInformation: any;
@@ -75,30 +67,6 @@ export const AssetInfo: FC<AssetInfoProps> = ({
           />
         ))}
       </SimpleGrid>
-
-      <HStack spacing={2}>
-        <Link
-          href={`https://stellar.expert/explorer/public/asset/${asset?.code}-${asset?.issuer}`}
-          target="_blank"
-          fontSize="sm"
-        >
-          See on stellar.expert
-        </Link>
-        <Link
-          href={`https://stellarchain.io/assets/${asset?.code}-${asset?.issuer}`}
-          target="_blank"
-          fontSize="sm"
-        >
-          See on stellarchain.io
-        </Link>
-        <Link
-          href={`https://app.soroswap.finance/swap/${asset?.contract}`}
-          target="_blank"
-          fontSize="sm"
-        >
-          Swap on soroswap
-        </Link>
-      </HStack>
     </VStack>
   );
 };
