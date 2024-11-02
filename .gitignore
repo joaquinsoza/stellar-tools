@@ -36,3 +36,7 @@ yarn-error.log*
 next-env.d.ts
 
 certificates
+
+contracts/*/.vscode
+contracts/*/target
+contracts/*/test_snapshots
