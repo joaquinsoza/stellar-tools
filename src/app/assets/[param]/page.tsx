@@ -35,6 +35,7 @@ import {
 import { useParams } from "next/navigation";
 import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 import { DexPoolTable } from "@/components/Assets/pools/DexPoolTable";
+import { AssetInfo } from "@/components/Assets/tabs/info/AssetInfo";
 
 type PoolsTable = {
   asset?: AssetType;
@@ -116,7 +117,7 @@ export default function Asset() {
         <Tabs
           rounded="2xl"
           width="100%"
-          height={80}
+          height="100%"
           bg={"Background"}
           colorScheme="pink"
         >
@@ -126,72 +127,12 @@ export default function Asset() {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <VStack spacing={4} align="flex-start">
-                {asset?.comment && (
-                  <Text fontStyle="italic" color="gray.500">
-                    List provider comment: {`"${asset?.comment}"`}
-                  </Text>
-                )}
-                <SimpleGrid
-                  columns={{ base: 1, md: 2 }}
-                  spacing={2}
-                  width="100%"
-                >
-                  <Tooltip label="Copy to clipboard" openDelay={500}>
-                    <HStack
-                      cursor={"pointer"}
-                      onClick={() =>
-                        copyToClipboard(
-                          issuer,
-                          `${asset?.code} address copied!`
-                        )
-                      }
-                    >
-                      <Text>
-                        <strong>Issuer:</strong> {shortenAddress(issuer)}
-                      </Text>
-                    </HStack>
-                  </Tooltip>
-                  <Text>
-                    <strong>Decimals:</strong> {asset?.decimals}
-                  </Text>
-                  <Text>
-                    <strong>Organization:</strong> {asset?.org}
-                  </Text>
-                  <Text>
-                    <strong>Supply:</strong> {assetInformation?.amount}
-                  </Text>
-                  <Text>
-                    <strong>Holders:</strong> {assetInformation?.num_accounts}
-                  </Text>
-                </SimpleGrid>
-
-                <HStack spacing={2}>
-                  <Link
-                    href={`https://stellar.expert/explorer/public/asset/${asset?.code}-${asset?.issuer}`}
-                    target="_blank"
-                    fontSize="sm"
-                  >
-                    See on stellar.expert
-                  </Link>
-                  <Link
-                    href={`https://stellarchain.io/assets/${asset?.code}-${asset?.issuer}`}
-                    target="_blank"
-                    fontSize="sm"
-                  >
-                    See on stellarchain.io
-                  </Link>
-                  <Link
-                    href={`https://app.soroswap.finance/swap/${asset?.contract}`}
-                    target="_blank"
-                    fontSize="sm"
-                  >
-                    Swap on soroswap
-                  </Link>
-                </HStack>
-              </VStack>
+              <AssetInfo
+                asset={asset!}
+                assetInformation={assetInformation}
+                issuer={issuer}
+              />
             </TabPanel>
-
             <PoolsTable asset={asset!} />
           </TabPanels>
         </Tabs>
