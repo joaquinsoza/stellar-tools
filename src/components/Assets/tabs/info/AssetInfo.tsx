@@ -3,6 +3,7 @@ import { VStack, Text, SimpleGrid } from "@chakra-ui/react";
 import { shortenAddress } from "@/helpers/address";
 import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 import { InfoCard } from "./InfoCard";
+
 type AssetInfoProps = {
   asset: AssetType;
   assetInformation: any;
