@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
 import { Pool } from "@/common/types/types";
-import { ServerApi } from "@stellar/stellar-sdk/lib/horizon/server_api";
 
 //TODO: improve reusability
-export function usePoolsForAsset(
-  call:
-    | Promise<ServerApi.CollectionPage<ServerApi.LiquidityPoolRecord>>
-    | undefined
-) {
+export function usePoolsForAsset(call: any) {
   const [pools, setPools] = useState<Pool[]>([]);
   const [next, setNext] = useState(() => call);
   const [loading, setLoading] = useState(false);
@@ -22,12 +17,12 @@ export function usePoolsForAsset(
       const response = await next;
 
       setPools((prevPools) => {
-        const newPools = response.records.map((record) => ({
+        const newPools = response.records.map((record: any) => ({
           id: record.id,
           fee: record.fee_bp,
           type: record.type,
           total_shares: record.total_shares,
-          reserves: record.reserves.map((reserve) => ({
+          reserves: record.reserves.map((reserve: any) => ({
             asset: reserve.asset,
             amount: reserve.amount,
           })),
@@ -36,7 +31,7 @@ export function usePoolsForAsset(
         const uniquePools = Array.from(
           new Set([
             ...prevPools.map((pool) => JSON.stringify(pool)),
-            ...newPools.map((pool) => JSON.stringify(pool)),
+            ...newPools.map((pool: any) => JSON.stringify(pool)),
           ])
         );
 
