@@ -1,15 +1,6 @@
-import {
-  VStack,
-  Text,
-  SimpleGrid,
-  HStack,
-  Link,
-  Tooltip,
-  Image,
-} from "@chakra-ui/react";
-import { shortenAddress } from "@/helpers/address";
-import { useClipboard } from "@/hooks/useClipboard";
 import { FC } from "react";
+import { VStack, Text, SimpleGrid } from "@chakra-ui/react";
+import { shortenAddress } from "@/helpers/address";
 import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 import { InfoCard } from "./InfoCard";
 type AssetInfoProps = {
