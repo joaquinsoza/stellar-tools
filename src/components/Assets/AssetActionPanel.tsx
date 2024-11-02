@@ -212,6 +212,7 @@ export function AssetActionPanel({ asset }: AssetActionProps) {
           </Button>
           <ManageTrustlineButton asset={asset} />
         </VStack>
+        <ConnectWalletToUse />
       </Card>
     </VStack>
   );
