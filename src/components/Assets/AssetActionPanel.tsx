@@ -7,6 +7,8 @@ import {
   Box,
   Button,
   useToast,
+  Icon,
+  HStack,
 } from "@chakra-ui/react";
 import { Asset } from "@stellar-asset-lists/sdk";
 import { ManageTrustlineButton } from "../Buttons/ManageTrustlineButton";
@@ -22,6 +24,7 @@ import { useSorobanReact } from "@soroban-react/core";
 import { useState } from "react";
 import { wrapStellarAsset } from "@soroban-react/contracts";
 import { Address, nativeToScVal } from "@stellar/stellar-sdk";
+import { FaWallet } from "react-icons/fa";
 
 interface AssetActionProps {
   asset?: Asset;
@@ -30,7 +33,8 @@ interface AssetActionProps {
 export function AssetActionPanel({ asset }: AssetActionProps) {
   const sorobanContext = useSorobanReact();
   const toast = useToast();
-  const { assetForAccount, isLoading } = useAssetForAccount(asset);
+  const { assetForAccount, isLoading, contractInfo, refetch } =
+    useAssetForAccount(asset);
 
   const [isDeployedOnSoroban, setIsDeployedOnSoroban] = useState<boolean>(true);
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
@@ -55,6 +59,7 @@ export function AssetActionPanel({ asset }: AssetActionProps) {
           isClosable: true,
           position: "bottom-right",
         });
+        refetch();
         setIsDeploying(false);
       })
       .catch((error) => {
@@ -67,6 +72,7 @@ export function AssetActionPanel({ asset }: AssetActionProps) {
           isClosable: true,
           position: "bottom-right",
         });
+        refetch();
         setIsDeploying(false);
       });
   };
@@ -85,6 +91,7 @@ export function AssetActionPanel({ asset }: AssetActionProps) {
           isClosable: true,
           position: "bottom-right",
         });
+        refetch();
         setIsBumping(false);
       })
       .catch((error) => {
@@ -97,55 +104,115 @@ export function AssetActionPanel({ asset }: AssetActionProps) {
           isClosable: true,
           position: "bottom-right",
         });
+        refetch();
         setIsBumping(false);
       });
   };
 
   return (
-    <Card flex={1} height={"full"} rounded={"2xl"} p={4}>
-      <VStack justifyContent="flex-start" height="100%" alignItems={"stretch"}>
-        <Box bg={"Highlight"} rounded={"lg"} p={2}>
-          <Text fontSize={"lg"} fontWeight={500}>
-            Balance:
+    <VStack spacing={4} width="250px">
+      <Card
+        flex={1}
+        rounded={"2xl"}
+        p={4}
+        width={"full"}
+        minH={"372px"}
+        boxShadow="md"
+      >
+        <VStack justifyContent="flex-start" alignItems={"center"} spacing={6}>
+          {/* Wallet Icon */}
+          <Box bg="blue.50" p={4} rounded="full">
+            <Icon as={FaWallet} boxSize={8} color="blue.400" />
+          </Box>
+
+          {/* Wallet Header */}
+          <Text fontSize="xl" fontWeight="bold">
+            Your Wallet
           </Text>
-          <Skeleton isLoaded={!isLoading} fadeDuration={1}>
-            <Text>
-              {assetForAccount?.balance} {asset?.code}
-            </Text>
-          </Skeleton>
-          {assetForAccount?.limit && (
-            <>
-              <Text fontSize={"lg"} fontWeight={500}>
-                Limit:
+
+          <VStack spacing={1} alignItems="left">
+            {/* Balance Section */}
+            <VStack spacing={1} alignItems="left">
+              <Text fontSize="lg" fontWeight="semibold">
+                {assetForAccount?.balance || "0.000000"} {asset?.code || "ETH"}
               </Text>
-              <Skeleton isLoaded={!isLoading} fadeDuration={1}>
-                <Text>
-                  {assetForAccount?.limit} {asset?.code}
-                </Text>
-              </Skeleton>
-            </>
-          )}
-        </Box>
-        <ManageTrustlineButton asset={asset} />
-        <Button
-          onClick={handleDeployToSoroban}
-          colorScheme="pink"
-          size="lg"
-          isDisabled={isDeployedOnSoroban}
-          isLoading={isDeploying}
-        >
-          Deploy on Soroban
-        </Button>
-        <Button
-          onClick={handleBumpContractInstance}
-          colorScheme="pink"
-          size="lg"
-          isLoading={isBumping}
-        >
-          Bump Contract
-        </Button>
-      </VStack>
-      <ConnectWalletToUse />
-    </Card>
+              <Text fontSize="sm" color="gray.500">
+                BALANCE
+              </Text>
+            </VStack>
+
+            {/* Limit Section */}
+            <VStack spacing={1} alignItems="left">
+              <Text fontSize="lg" fontWeight="semibold">
+                {assetForAccount?.limit ?? "0"} {asset?.code || "ETH"}
+              </Text>
+              <Text fontSize="sm" color="gray.500">
+                LIMIT
+              </Text>
+            </VStack>
+          </VStack>
+
+          {/* Contract Status */}
+          <HStack
+            spacing={4}
+            alignItems="center"
+            width={"full"}
+            justifyContent={"space-between"}
+          >
+            <VStack spacing={0} alignItems="left">
+              <Text fontSize="sm" color="blue.500" fontWeight="semibold">
+                {contractInfo.isActive
+                  ? "Active"
+                  : isDeployedOnSoroban
+                  ? "Expired"
+                  : "Not Deployed"}
+              </Text>
+              <Text fontSize="xs" color="gray.500">
+                CONTRACT
+              </Text>
+            </VStack>
+            <VStack spacing={0} alignItems="left">
+              <Text fontSize="sm" fontWeight="medium">
+                {contractInfo.remaining}
+              </Text>
+              <Text fontSize="xs" color="gray.500">
+                TIME REMAINING
+              </Text>
+            </VStack>
+          </HStack>
+        </VStack>
+        <ConnectWalletToUse />
+      </Card>
+      <Card flex={1} width={"full"} rounded={"2xl"} p={6} boxShadow="md">
+        {/* Action Buttons */}
+        <VStack spacing={4} width="full">
+          <Button
+            onClick={handleBumpContractInstance}
+            colorScheme="pink"
+            size="sm"
+            width={"full"}
+            height={8}
+            isLoading={isBumping}
+            isDisabled={!isDeployedOnSoroban}
+            variant={"outline"}
+          >
+            Bump Contract
+          </Button>
+          <Button
+            onClick={handleDeployToSoroban}
+            colorScheme="pink"
+            size="sm"
+            width={"full"}
+            height={8}
+            variant={"outline"}
+            isDisabled={isDeployedOnSoroban}
+            isLoading={isDeploying}
+          >
+            Deploy on Soroban
+          </Button>
+          <ManageTrustlineButton asset={asset} />
+        </VStack>
+      </Card>
+    </VStack>
   );
 }
