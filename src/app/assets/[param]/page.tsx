@@ -136,8 +136,8 @@ export default function Asset() {
               />
             </TabPanel>
             <PoolsTable asset={asset!} />
+            <TabPanel>Coming soon</TabPanel>
           </TabPanels>
-          <TabPanels>Coming soon</TabPanels>
         </Tabs>
       </GridItem>
       <GridItem gridArea="transactions">
