@@ -75,30 +75,6 @@ export const AssetInfo: FC<AssetInfoProps> = ({
           />
         ))}
       </SimpleGrid>
-
-      <HStack spacing={2}>
-        <Link
-          href={`https://stellar.expert/explorer/public/asset/${asset?.code}-${asset?.issuer}`}
-          target="_blank"
-          fontSize="sm"
-        >
-          See on stellar.expert
-        </Link>
-        <Link
-          href={`https://stellarchain.io/assets/${asset?.code}-${asset?.issuer}`}
-          target="_blank"
-          fontSize="sm"
-        >
-          See on stellarchain.io
-        </Link>
-        <Link
-          href={`https://app.soroswap.finance/swap/${asset?.contract}`}
-          target="_blank"
-          fontSize="sm"
-        >
-          Swap on soroswap
-        </Link>
-      </HStack>
     </VStack>
   );
 };
