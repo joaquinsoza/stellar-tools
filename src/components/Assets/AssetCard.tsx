@@ -28,24 +28,7 @@ const SOROSWAP_URL: string = "https://app.soroswap.finance/swap/";
 const STELLAR_CHAIN_URL: string = "https://stellarchain.io/assets/";
 const STELLAR_EXPERT_URL: string =
   "https://stellar.expert/explorer/public/asset/";
-{
-  /* <HStack spacing={2}>
-<Link
-  href={`https://stellar.expert/explorer/public/asset/${asset?.code}-${asset?.issuer}`}
-  target="_blank"
-  fontSize="sm"
->
-  See on stellar.expert
-</Link>
-<Link
-  href={`https://stellarchain.io/assets/${asset?.code}-${asset?.issuer}`}
-  target="_blank"
-  fontSize="sm"
->
-  See on stellarchain.io
-</Link>
- */
-}
+
 interface AssetCardProps {
   name?: string;
   icon?: string;
