@@ -186,6 +186,7 @@ export default function ContractsPage() {
             label="Bump Contract"
             onClick={handleBumpContractInstance}
             isLoading={isBumping}
+            isDisabled={!isAddress(contractAddress)}
             width="full"
             requiresWallet
           />
@@ -193,6 +194,7 @@ export default function ContractsPage() {
             label="Restore Contract"
             onClick={handleRestoreContract}
             isLoading={isBumping}
+            isDisabled={!isAddress(contractAddress) || ledgerInfo?.isActive}
             width="full"
             requiresWallet
           />
