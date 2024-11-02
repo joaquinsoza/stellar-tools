@@ -15,6 +15,7 @@ import {
   getTokenName,
   getTokenSymbol,
 } from "@/helpers/soroban";
+import { getContractLedgerInfo, LedgerContractInfo } from "./useContract";
 
 type MyBalanceLineAsset = {
   balance: string;
@@ -32,11 +33,6 @@ export interface UseAssetProps {
   contract?: string;
   code?: string;
   issuer?: string;
-}
-
-interface LedgerContractInfo {
-  isActive: boolean;
-  remaining: string;
 }
 
 export function useAsset({
@@ -148,11 +144,13 @@ export const useAssetForAccount = (asset?: AssetType) => {
   const [contractInfo, setContractInfo] = useState<LedgerContractInfo>({
     isActive: true,
     remaining: "0 Days",
+    expiresOnLedger: undefined,
+    modifiedOnLedger: undefined,
   });
 
   const fetchContractInfo = useCallback(async () => {
     if (asset?.contract) {
-      const info = await getContractInfo(asset.contract);
+      const info = await getContractLedgerInfo(asset.contract);
       setContractInfo(info);
     }
   }, [asset]);
@@ -186,50 +184,4 @@ export const useAssetForAccount = (asset?: AssetType) => {
     isError,
     refetch: fetchContractInfo,
   };
-};
-
-const getContractInfo = async (contract: string) => {
-  const rpc = process.env.NEXT_PUBLIC_SOROBAN_MAINNET_RPC ?? "";
-
-  try {
-    let server = new SorobanRpc.Server(rpc, { allowHttp: true });
-
-    const instance = new Contract(contract).getFootprint();
-    const ledgerEntries = await server.getLedgerEntries(instance);
-    const latestLedger = await server.getLatestLedger();
-
-    const liveUntilLedgerSeq = ledgerEntries.entries[0]?.liveUntilLedgerSeq;
-
-    if (!liveUntilLedgerSeq || !latestLedger.sequence) {
-      throw new Error("Invalid liveUntilLedgerSeq or current ledger sequence");
-    }
-
-    const daysRemaining = calculateDaysRemaining(
-      latestLedger.sequence,
-      liveUntilLedgerSeq
-    );
-
-    return {
-      isActive: daysRemaining > 0,
-      remaining: `${Math.max(0, Number(daysRemaining.toFixed(2)))} Days`,
-    };
-  } catch (e) {
-    console.error("🚀 « error:", e);
-
-    return {
-      isActive: false,
-      remaining: "0 Days",
-    };
-  }
-};
-
-// Helper function to calculate days remaining
-const calculateDaysRemaining = (
-  currentLedgerSeq: number,
-  liveUntilLedgerSeq: number
-) => {
-  const ledgersRemaining = liveUntilLedgerSeq - currentLedgerSeq;
-  const secondsRemaining = ledgersRemaining * 5; // 5 seconds per ledger
-  const daysRemaining = secondsRemaining / (60 * 60 * 24); // Convert to days
-  return daysRemaining;
 };

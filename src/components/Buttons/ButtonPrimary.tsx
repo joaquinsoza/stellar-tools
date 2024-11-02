@@ -9,6 +9,11 @@ interface ButtonPrimaryProps {
   onClick: () => void;
   isLoading?: boolean;
   requiresWallet?: boolean;
+  size?: "sm" | "md" | "lg";
+  width?: string;
+  height?: number;
+  variant?: "solid" | "outline";
+  isDisabled?: boolean;
 }
 
 export function ButtonPrimary({
@@ -16,6 +21,11 @@ export function ButtonPrimary({
   onClick,
   isLoading,
   requiresWallet,
+  size,
+  width,
+  height,
+  variant,
+  isDisabled,
 }: ButtonPrimaryProps) {
   const { address } = useSorobanReact();
 
@@ -26,9 +36,13 @@ export function ButtonPrimary({
       ) : (
         <Button
           colorScheme="pink"
-          variant="solid"
+          variant={variant ?? "solid"}
           onClick={onClick}
+          size={size ?? "md"}
+          width={width ?? "full"}
+          height={height ?? 8}
           isLoading={isLoading}
+          isDisabled={isDisabled}
         >
           {label}
         </Button>
