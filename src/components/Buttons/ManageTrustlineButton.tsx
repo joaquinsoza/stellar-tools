@@ -15,6 +15,7 @@ import {
   Input,
   useToast,
   Spinner,
+  Icon,
 } from "@chakra-ui/react";
 import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 import { useAssetForAccount } from "@/hooks/useAsset";
@@ -28,6 +29,7 @@ import {
 } from "@stellar/stellar-sdk";
 import { useAccount } from "@/hooks/useAccount";
 import { useSorobanReact } from "@soroban-react/core";
+import { FaPencil } from "react-icons/fa6";
 
 interface ManageTrustlineProps {
   asset?: AssetType;
@@ -129,7 +131,14 @@ export function ManageTrustlineButton({ asset }: ManageTrustlineProps) {
 
   return (
     <>
-      <Button colorScheme="pink" variant="solid" onClick={onOpen}>
+      <Button
+        colorScheme="pink"
+        width={"full"}
+        variant="solid"
+        onClick={onOpen}
+        justifyContent={"space-around"}
+      >
+        <Icon as={FaPencil} boxSize={4} />
         Manage Trustline
       </Button>
 

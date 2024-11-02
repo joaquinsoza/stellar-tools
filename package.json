@@ -23,7 +23,7 @@
     "@soroban-react/wallet-data": "9.1.4",
     "@soroban-react/xbull": "9.1.2",
     "@stellar-asset-lists/sdk": "^1.0.1",
-    "@stellar/stellar-sdk": "^11.3.0",
+    "@stellar/stellar-sdk": "^12.3.0",
     "@vercel/analytics": "^1.2.2",
     "framer-motion": "^11.0.25",
     "lodash": "^4.17.21",

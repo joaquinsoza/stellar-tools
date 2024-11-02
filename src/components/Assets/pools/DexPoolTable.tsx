@@ -21,9 +21,8 @@ import {
   calculatePrice,
 } from "@/components/utils/Assets/Pool";
 import { useSorobanReact } from "@soroban-react/core";
-import { Asset } from "@stellar/stellar-sdk";
+import { Asset, Horizon } from "@stellar/stellar-sdk";
 
-import { ServerApi } from "@stellar/stellar-sdk/lib/horizon/server_api";
 import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 
 type DexPoolTableProps = {
@@ -34,9 +33,7 @@ export function DexPoolTable({ asset }: DexPoolTableProps) {
   const { serverHorizon } = useSorobanReact();
   const newAsset = new Asset(asset?.code, asset?.issuer);
   const call = serverHorizon?.liquidityPools().forAssets(newAsset).call();
-  const { pools, loading, loadMore } = usePoolsForAsset(
-    call as Promise<ServerApi.CollectionPage<ServerApi.LiquidityPoolRecord>>
-  );
+  const { pools, loading, loadMore } = usePoolsForAsset(call);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isInitialLoad, setIsInitialLoad] = React.useState(true);
 
