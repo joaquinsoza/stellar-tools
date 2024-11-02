@@ -56,6 +56,7 @@ const PoolsTable = ({ asset }: PoolsTable) => {
 export default function Asset() {
   const copyToClipboard = useClipboard();
   const { param } = useParams<{ param: string }>();
+  let temporalSkeletons = Array.from({ length: 8 }, (_, i) => i);
 
   let assetProps: UseAssetProps = {};
   let assetInformationProps: UseAssetInformationProps = {};
@@ -127,7 +128,7 @@ export default function Asset() {
             <Tab>Pools</Tab>
             <Tab>Transactions</Tab>
           </TabList>
-          <TabPanels>
+          <TabPanels minHeight={400}>
             <TabPanel>
               <AssetInfo
                 asset={asset!}
@@ -136,7 +137,18 @@ export default function Asset() {
               />
             </TabPanel>
             <PoolsTable asset={asset!} />
-            <TabPanel>Coming soon</TabPanel>
+            <TabPanel>
+              <Box position="relative" p={4} height={400}>
+                <Stack spacing={3}>
+                  {temporalSkeletons.map((i) => (
+                    <Skeleton height="35px" key={i} speed={2} />
+                  ))}
+                </Stack>
+                <Stack maxHeight={400}>
+                  <CommingSoon />
+                </Stack>
+              </Box>
+            </TabPanel>
           </TabPanels>
         </Tabs>
       </GridItem>

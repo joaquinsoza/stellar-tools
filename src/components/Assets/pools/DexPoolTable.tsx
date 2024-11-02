@@ -67,7 +67,7 @@ export function DexPoolTable({ asset }: DexPoolTableProps) {
   return (
     <Box
       ref={scrollRef}
-      maxHeight={250}
+      maxHeight={400}
       maxWidth={1300}
       overflowY="auto"
       borderWidth="1px"
