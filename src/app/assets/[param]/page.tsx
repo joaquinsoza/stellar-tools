@@ -140,19 +140,6 @@ export default function Asset() {
           </TabPanels>
         </Tabs>
       </GridItem>
-      <GridItem gridArea="transactions">
-        <Text fontSize="lg" fontWeight="semibold">
-          Transactions
-        </Text>
-        <Box position="relative" p={4}>
-          <Stack spacing={3}>
-            <Skeleton height="35px" speed={2} />
-            <Skeleton height="35px" speed={2} />
-            <Skeleton height="35px" speed={2} />
-          </Stack>
-          <CommingSoon />
-        </Box>
-      </GridItem>
     </Grid>
   );
 }
