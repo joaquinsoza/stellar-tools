@@ -149,16 +149,16 @@ export default function ContractsPage() {
               <Text>{ledgerInfo.remaining}</Text>
             </HStack>
             <HStack>
+              <Text fontWeight="bold">Current Ledger:</Text>
+              <Text>{ledgerInfo?.currentLedgerSeq}</Text>
+            </HStack>
+            <HStack>
               <Text fontWeight="bold">Expires On Ledger:</Text>
               <Text>{ledgerInfo?.expiresOnLedger}</Text>
             </HStack>
             <HStack>
               <Text fontWeight="bold">Last Modified Ledger:</Text>
               <Text>{ledgerInfo?.modifiedOnLedger}</Text>
-            </HStack>
-            <HStack>
-              <Text fontWeight="bold">Current Ledger:</Text>
-              <Text>{ledgerInfo?.currentLedgerSeq}</Text>
             </HStack>
           </VStack>
         ) : (
