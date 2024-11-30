@@ -1,37 +1,23 @@
 "use client";
-import { AssetActionPanel } from "@/components/Assets/AssetActionPanel";
-import { AssetCard } from "@/components/Assets/AssetCard";
-import { ManageTrustlineButton } from "@/components/Buttons/ManageTrustlineButton";
-import { CommingSoon } from "@/components/DisabledComponents/CommingSoon";
-import { ConnectWalletToUse } from "@/components/DisabledComponents/ConnectWalletToUse";
-import { isAddress, isCodeIssuerPair, shortenAddress } from "@/helpers/address";
-import { UseAssetProps, useAsset } from "@/hooks/useAsset";
 import {
-  UseAssetInformationProps,
-  useAssetInformation,
-} from "@/hooks/useAssetInformation";
-import { useClipboard } from "@/hooks/useClipboard";
-import {
-  Box,
-  VStack,
-  Link,
-  Button,
   Text,
-  Skeleton,
-  Stack,
-  Card,
   Grid,
-  useMediaQuery,
   GridItem,
   Tabs,
   TabList,
   Tab,
   TabPanels,
   TabPanel,
-  HStack,
-  SimpleGrid,
-  Tooltip,
 } from "@chakra-ui/react";
+import { AssetActionPanel } from "@/components/Assets/AssetActionPanel";
+import { AssetCard } from "@/components/Assets/AssetCard";
+import { isAddress, isCodeIssuerPair } from "@/helpers/address";
+import { UseAssetProps, useAsset } from "@/hooks/useAsset";
+import {
+  UseAssetInformationProps,
+  useAssetInformation,
+} from "@/hooks/useAssetInformation";
+import { useClipboard } from "@/hooks/useClipboard";
 import { useParams } from "next/navigation";
 import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 import { DexPoolTable } from "@/components/Assets/pools/DexPoolTable";
