@@ -16,6 +16,9 @@ import {
   useToast,
   Spinner,
   Icon,
+  UnorderedList,
+  ListItem,
+  HStack,
 } from "@chakra-ui/react";
 import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 import { useAssetForAccount } from "@/hooks/useAsset";
@@ -43,9 +46,17 @@ export function ManageTrustlineButton({ asset }: ManageTrustlineProps) {
   const [newLimit, setNewLimit] = useState("");
   const [submittingTx, setSubmittingTx] = useState<boolean>(false);
   const { account } = useAccount();
+  const haveBalance = assetForAccount?.balance
+    ? Number(assetForAccount?.balance) !== 0
+    : false;
 
   const handleLimitChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setNewLimit(event.target.value);
+
+  const handleRevokeChange = () => {
+    setNewLimit("0");
+    handleSubmit();
+  };
 
   const handleSubmit = async () => {
     if (!asset || !account) return;
@@ -145,7 +156,12 @@ export function ManageTrustlineButton({ asset }: ManageTrustlineProps) {
       <Modal
         isOpen={isOpen}
         onClose={
-          submittingTx ? () => console.log("submitting tx cant close") : onClose
+          submittingTx
+            ? () => console.log("submitting tx cant close")
+            : () => {
+                onClose();
+                setNewLimit("");
+              }
         }
         size={"md"}
         isCentered
@@ -155,12 +171,26 @@ export function ManageTrustlineButton({ asset }: ManageTrustlineProps) {
           <ModalHeader>Adjust Trustline</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            <VStack alignItems="baseline" mb={5}>
+              <Text letterSpacing={0.5} color="gray">
+                CURRENT LIMIT
+              </Text>
+              <Text fontWeight="bold">
+                {assetForAccount?.limit || "NOT SET"}
+              </Text>
+            </VStack>
             <VStack spacing={4}>
-              <Text>Current limit: {assetForAccount?.limit || "Not set"}</Text>
               <Text fontSize="sm" color="gray.500">
-                Enter a new limit for your trustline. Setting the limit to 0
-                will revoke the trustline. Note that the limit cannot be lower
-                than your current balance ({assetForAccount?.balance ?? 0}).
+                <UnorderedList>
+                  <ListItem>
+                    Enter a new limit for your trustline. Setting the limit to 0
+                    will revoke the trustline.
+                  </ListItem>
+                  <ListItem>
+                    Note that the limit cannot be lower than your current
+                    balance ({assetForAccount?.balance ?? 0}).
+                  </ListItem>
+                </UnorderedList>
               </Text>
               <Input
                 placeholder="New limit"
@@ -169,8 +199,20 @@ export function ManageTrustlineButton({ asset }: ManageTrustlineProps) {
               />
             </VStack>
           </ModalBody>
-          <ModalFooter>
-            <Button disabled={submittingTx} onClick={handleSubmit}>
+          <ModalFooter gap={5}>
+            <Button
+              isDisabled={!haveBalance || submittingTx}
+              onClick={handleRevokeChange}
+              variant="outline"
+              colorScheme="blue"
+            >
+              {submittingTx ? <Spinner /> : "Revoke Trustline"}
+            </Button>
+            <Button
+              isDisabled={submittingTx}
+              onClick={handleSubmit}
+              colorScheme="blue"
+            >
               {submittingTx ? <Spinner /> : "Update Trustline"}
             </Button>
           </ModalFooter>
