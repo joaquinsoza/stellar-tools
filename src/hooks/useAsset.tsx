@@ -47,7 +47,7 @@ export function useAsset({
   useEffect(() => {
     const fetchAssetMetadata = async () => {
       if (contract) {
-        const foundAsset = assets?.find((ast) => ast.contract === contract);
+        const foundAsset = assets?.find((ast: AssetType) => ast.contract === contract);
         if (foundAsset) {
           setAsset(foundAsset);
           return;
@@ -79,7 +79,7 @@ export function useAsset({
 
       if (code && issuer) {
         const foundAsset = assets?.find(
-          (ast) => ast.code === code && ast.issuer === issuer
+          (ast: AssetType) => ast.code === code && ast.issuer === issuer
         );
         if (foundAsset) {
           setAsset(foundAsset);

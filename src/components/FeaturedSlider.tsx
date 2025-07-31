@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Box, Text, Image, useColorModeValue } from "@chakra-ui/react";
+import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { A11y, Navigation } from "swiper/modules";
@@ -36,7 +36,7 @@ const slidesData = [
 
 export const FeaturedSlider = () => {
   return (
-    <Box position="relative" width="full">
+    <div className="relative w-full">
       <Swiper
         modules={[Navigation]}
         spaceBetween={16}
@@ -51,26 +51,21 @@ export const FeaturedSlider = () => {
         {slidesData.map((slide, index) => (
           <SwiperSlide key={index}>
             <Link href={slide.href} target="_blank">
-              <Box
-                position="relative"
-                height={40}
-                width="full"
-                bg={slide.bg}
-                rounded={"xl"}
-                p={4}
+              <div
+                className="relative h-40 w-full rounded-xl p-4"
+                style={{ backgroundColor: slide.bg }}
               >
                 <Image
                   src={slide.image}
                   alt={slide.title}
-                  objectFit="contain"
-                  width="full"
-                  height={132}
+                  fill
+                  style={{ objectFit: "contain" }}
                 />
-              </Box>
+              </div>
             </Link>
           </SwiperSlide>
         ))}
       </Swiper>
-    </Box>
+    </div>
   );
 };

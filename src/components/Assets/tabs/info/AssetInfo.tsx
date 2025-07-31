@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { VStack, Text, SimpleGrid } from "@chakra-ui/react";
 import { shortenAddress } from "@/helpers/address";
 import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 import { InfoCard } from "./InfoCard";
@@ -44,20 +43,13 @@ export const AssetInfo: FC<AssetInfoProps> = ({
   ];
 
   return (
-    <VStack spacing={1} align="flex-start">
+    <div className="flex flex-col space-y-1 items-start">
       {asset?.comment && (
-        <Text fontStyle="italic" color="gray.500">
+        <p className="italic text-gray-500">
           List provider comment: {`"${asset?.comment}"`}
-        </Text>
+        </p>
       )}
-      <SimpleGrid
-        columns={{ base: 1, md: 3 }}
-        spacing={6}
-        alignContent="center"
-        justifyContent="center"
-        alignItems="center"
-        width={"80%"}
-      >
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-center items-center w-4/5">
         {cardsInfo.map((cardInfo) => (
           <InfoCard
             title={cardInfo.title}
@@ -66,7 +58,7 @@ export const AssetInfo: FC<AssetInfoProps> = ({
             key={cardInfo.title}
           />
         ))}
-      </SimpleGrid>
-    </VStack>
+      </div>
+    </div>
   );
 };

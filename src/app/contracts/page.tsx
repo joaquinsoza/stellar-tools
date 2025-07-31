@@ -1,20 +1,6 @@
 "use client";
-import {
-  Box,
-  Link as ChakraLink,
-  Text,
-  VStack,
-  Heading,
-  InputGroup,
-  Input,
-  HStack,
-  useToast,
-  Divider,
-  Badge,
-  Spinner,
-  Flex,
-} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { isAddress, shortenAddress } from "@/helpers/address";
 import { ButtonPrimary } from "@/components/Buttons/ButtonPrimary";
 import { bumpContractInstance, restoreContract } from "@/helpers/soroban";
@@ -23,7 +9,6 @@ import { getContractLedgerInfo } from "@/hooks/useContract";
 
 export default function ContractsPage() {
   const sorobanContext = useSorobanReact();
-  const toast = useToast();
   const [contractAddress, setContractAddress] = useState<string>("");
   const [isBumping, setIsBumping] = useState<boolean>(false);
   const [ledgerInfo, setLedgerInfo] = useState<any>(null);
@@ -35,29 +20,13 @@ export default function ContractsPage() {
     bumpContractInstance(contractAddress, sorobanContext)
       .then((resp) => {
         console.log(resp);
-        toast({
-          title: "Contract TTL extended!",
-          description: `You have successfully extended ${shortenAddress(
-            contractAddress
-          )} TTL.`,
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-right",
-        });
+        toast.success(`Contract TTL extended! You have successfully extended ${shortenAddress(contractAddress)} TTL.`);
         setIsBumping(false);
         refetchLedgerInfo(); // Refresh ledger info after bumping
       })
       .catch((error) => {
         console.log("🚀 « error:", error);
-        toast({
-          title: "Error",
-          description: `${error}`,
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-          position: "bottom-right",
-        });
+        toast.error(`Error: ${error}`);
         setIsBumping(false);
       });
   };
@@ -68,29 +37,13 @@ export default function ContractsPage() {
     restoreContract(contractAddress, sorobanContext)
       .then((resp) => {
         console.log(resp);
-        toast({
-          title: "Contract restored!",
-          description: `You have successfully restored ${shortenAddress(
-            contractAddress
-          )}`,
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-right",
-        });
+        toast.success(`Contract restored! You have successfully restored ${shortenAddress(contractAddress)}`);
         setIsBumping(false);
         refetchLedgerInfo(); // Refresh ledger info after restoring
       })
       .catch((error) => {
         console.log("🚀 « error:", error);
-        toast({
-          title: "Error",
-          description: `${error}`,
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-          position: "bottom-right",
-        });
+        toast.error(`Error: ${error}`);
         setIsBumping(false);
       });
   };
@@ -110,78 +63,75 @@ export default function ContractsPage() {
   }, [contractAddress]);
 
   return (
-    <VStack spacing={6} align="center" px={{ base: 4, md: 8 }} py={8}>
-      <Heading as="h1" size="xl" mb={4}>
+    <div className="flex flex-col items-center space-y-6 px-4 md:px-8 py-8">
+      <h1 className="text-4xl font-bold mb-4">
         Contract Management
-      </Heading>
-      <Text color="gray.600" textAlign="center" maxW="lg">
+      </h1>
+      <p className="text-gray-600 text-center max-w-lg">
         View and manage the time-to-live for any contract address on the Soroban
         network.
-      </Text>
+      </p>
 
       {/* Contract Ledger Info */}
-      <Box
-        width="100%"
-        maxW="lg"
-        p={6}
-        rounded="md"
-        boxShadow="lg"
-        bg="gray.50"
-      >
-        <Heading as="h2" size="md" mb={4} color="blue.500">
+      <div className="w-full max-w-lg p-6 rounded-md shadow-lg bg-gray-50">
+        <h2 className="text-xl font-semibold mb-4 text-blue-500">
           Contract Ledger Information
-        </Heading>
+        </h2>
 
         {loadingInfo ? (
-          <Flex justify="center">
-            <Spinner size="lg" />
-          </Flex>
+          <div className="flex justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          </div>
         ) : ledgerInfo ? (
-          <VStack spacing={3} align="start">
-            <HStack>
-              <Text fontWeight="bold">Status:</Text>
-              <Badge colorScheme={ledgerInfo.isActive ? "green" : "red"}>
+          <div className="space-y-3">
+            <div className="flex items-center space-x-2">
+              <span className="font-bold">Status:</span>
+              <span className={`px-2 py-1 rounded text-sm font-medium ${
+                ledgerInfo.isActive 
+                  ? 'bg-green-100 text-green-800' 
+                  : 'bg-red-100 text-red-800'
+              }`}>
                 {ledgerInfo.isActive ? "Active" : "Expired"}
-              </Badge>
-            </HStack>
-            <HStack>
-              <Text fontWeight="bold">Time Remaining:</Text>
-              <Text>{ledgerInfo.remaining}</Text>
-            </HStack>
-            <HStack>
-              <Text fontWeight="bold">Current Ledger:</Text>
-              <Text>{ledgerInfo?.currentLedgerSeq}</Text>
-            </HStack>
-            <HStack>
-              <Text fontWeight="bold">Expires On Ledger:</Text>
-              <Text>{ledgerInfo?.expiresOnLedger}</Text>
-            </HStack>
-            <HStack>
-              <Text fontWeight="bold">Last Modified Ledger:</Text>
-              <Text>{ledgerInfo?.modifiedOnLedger}</Text>
-            </HStack>
-          </VStack>
+              </span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="font-bold">Time Remaining:</span>
+              <span>{ledgerInfo.remaining}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="font-bold">Current Ledger:</span>
+              <span>{ledgerInfo?.currentLedgerSeq}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="font-bold">Expires On Ledger:</span>
+              <span>{ledgerInfo?.expiresOnLedger}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="font-bold">Last Modified Ledger:</span>
+              <span>{ledgerInfo?.modifiedOnLedger}</span>
+            </div>
+          </div>
         ) : (
-          <Text color="gray.500">
+          <p className="text-gray-500">
             Enter a valid contract address to view details.
-          </Text>
+          </p>
         )}
-      </Box>
+      </div>
 
-      <Divider />
+      <hr className="w-full max-w-lg border-gray-300" />
 
       {/* Input and Action Buttons */}
-      <VStack spacing={4} align="center" width="100%" maxW="lg">
-        <InputGroup>
-          <Input
+      <div className="flex flex-col items-center space-y-4 w-full max-w-lg">
+        <div className="w-full">
+          <input
             type="text"
             placeholder="Enter Contract Address"
             value={contractAddress}
             onChange={(e) => setContractAddress(e.target.value)}
-            size="lg"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
-        </InputGroup>
-        <HStack spacing={4} width="100%">
+        </div>
+        <div className="flex space-x-4 w-full">
           <ButtonPrimary
             label="Bump Contract"
             onClick={handleBumpContractInstance}
@@ -198,8 +148,8 @@ export default function ContractsPage() {
             width="full"
             requiresWallet
           />
-        </HStack>
-      </VStack>
-    </VStack>
+        </div>
+      </div>
+    </div>
   );
 }

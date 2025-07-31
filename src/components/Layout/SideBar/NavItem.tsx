@@ -1,52 +1,59 @@
-import { FlexProps, Flex, Icon, Tooltip } from "@chakra-ui/react";
 import { useSorobanReact } from "@soroban-react/core";
 import Link from "next/link";
 import { IconType } from "react-icons";
 
-interface NavItemProps extends FlexProps {
+interface NavItemProps {
   icon: IconType;
   href: string;
   children: React.ReactNode;
   requiresWallet?: boolean;
+  onClick?: () => void;
 }
 
 export const NavItem = ({
-  icon,
+  icon: Icon,
   href,
   children,
   requiresWallet,
-  ...rest
+  onClick,
 }: NavItemProps) => {
   const { address } = useSorobanReact();
   const isDisabled = requiresWallet && !address;
 
-  return (
-    <Tooltip label={isDisabled ? "Wallet connection required" : ""}>
-      <Flex
-        as={isDisabled ? "div" : Link}
-        href={isDisabled ? undefined : href}
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor={"pointer"}
-        _hover={{
-          bg: isDisabled ? "gray.200" : "pink.400",
-          color: isDisabled ? "gray.500" : "white",
-        }}
-        {...rest}
-      >
-        <Icon
-          mr={4}
-          fontSize="24"
-          _groupHover={{
-            color: isDisabled ? "gray.500" : "white",
-          }}
-          as={icon}
-        />
+  const content = (
+    <div
+      className={`
+        group flex items-center p-4 mx-4 rounded-lg cursor-pointer
+        ${isDisabled 
+          ? 'hover:bg-gray-200 hover:text-gray-500 text-gray-400' 
+          : 'hover:bg-pink-400 hover:text-white'
+        }
+      `}
+      title={isDisabled ? "Wallet connection required" : ""}
+      onClick={onClick}
+    >
+      <Icon
+        className={`
+          mr-4 text-2xl
+          ${isDisabled 
+            ? 'group-hover:text-gray-500' 
+            : 'group-hover:text-white'
+          }
+        `}
+      />
+      <span className="overflow-hidden whitespace-nowrap">
         {children}
-      </Flex>
-    </Tooltip>
+      </span>
+    </div>
+  );
+
+  if (isDisabled) {
+    return content;
+  }
+
+  return (
+    <Link href={href}>
+      {content}
+    </Link>
   );
 };

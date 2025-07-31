@@ -1,23 +1,4 @@
 "use client";
-import {
-  Box,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Button,
-  Flex,
-  Link as ChakraLink,
-  ButtonGroup,
-  Skeleton,
-  Avatar,
-  Text,
-  VStack,
-  Heading,
-  useMediaQuery,
-} from "@chakra-ui/react";
 import { useMergedAssetLists } from "@/hooks/useMergedAssetsList";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -62,24 +43,27 @@ const Pagination = ({
   }
 
   return (
-    <ButtonGroup variant="outline">
+    <div className="flex gap-1">
       {Array.from({ length: endPage - startPage + 1 }, (_, i) => (
-        <Button
+        <button
           key={startPage + i}
           onClick={() => onPageChange(startPage + i)}
-          isActive={currentPage === startPage + i}
+          className={`px-3 py-2 border rounded-md transition-colors ${
+            currentPage === startPage + i
+              ? 'bg-blue-500 text-white border-blue-500'
+              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+          }`}
         >
           {startPage + i}
-        </Button>
+        </button>
       ))}
-    </ButtonGroup>
+    </div>
   );
 };
 
 const AssetsTable = ({ assets }: { assets: Asset[] | undefined }) => {
   const [assetsPerPage, setAssetsPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
   const router = useRouter();
   if (!assets) return;
 
@@ -91,71 +75,61 @@ const AssetsTable = ({ assets }: { assets: Asset[] | undefined }) => {
   const changePage = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
-    <Box>
-      <Table variant="simple">
-        <Thead bg={"Background"}>
-          <Tr>
-            {isMobile ? (
-              <>
-                <Th>Icon</Th>
-                <Th>Code</Th>
-                <Th>Contract</Th>
-              </>
-            ) : (
-              <>
-                <Th>Icon</Th>
-                <Th>Code</Th>
-                <Th>Name</Th>
-                <Th>Contract</Th>
-                <Th>Domain</Th>
-              </>
-            )}
-          </Tr>
-        </Thead>
-        <Tbody>
-          {currentAssets.map((asset) => (
-            <Tr
-              key={asset.contract || `${asset.code}-${asset.issuer}`}
-              onClick={() =>
-                router.push(
-                  `/assets/${asset.contract || `${asset.code}-${asset.issuer}`}`
-                )
-              }
-              cursor="pointer"
-              bg={"Background"}
-              _hover={{ background: "ButtonFace" }}
-            >
-              {isMobile ? (
-                <>
-                  <Td>
-                    <Avatar size={"sm"} src={asset.icon} />
-                  </Td>
-                  <Td>{asset.code}</Td>
-                  <Td>{shortenAddress(asset.contract)}</Td>
-                </>
-              ) : (
-                <>
-                  <Td>
-                    <Avatar size={"sm"} src={asset.icon} />
-                  </Td>
-                  <Td>{asset.code}</Td>
-                  <Td>{asset.name}</Td>
-                  <Td>{shortenAddress(asset.contract)}</Td>
-                  <Td>{asset.domain}</Td>
-                </>
-              )}
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-      <Flex justifyContent="center" mt={4}>
+    <div>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Icon</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contract</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Domain</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {currentAssets.map((asset) => (
+              <tr
+                key={asset.contract || `${asset.code}-${asset.issuer}`}
+                onClick={() =>
+                  router.push(
+                    `/assets/${asset.contract || `${asset.code}-${asset.issuer}`}`
+                  )
+                }
+                className="cursor-pointer hover:bg-gray-50 transition-colors"
+              >
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <img 
+                    src={asset.icon} 
+                    alt={asset.code}
+                    className="w-8 h-8 rounded-full"
+                  />
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  {asset.code}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
+                  {asset.name}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {shortenAddress(asset.contract)}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
+                  {asset.domain}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="flex justify-center mt-4">
         <Pagination
           totalPages={totalPages}
           currentPage={currentPage}
           onPageChange={changePage}
         />
-      </Flex>
-    </Box>
+      </div>
+    </div>
   );
 };
 
@@ -163,11 +137,11 @@ export default function Assets() {
   const { providers, assets, isLoading } = useMergedAssetLists();
 
   return (
-    <VStack spacing={4} align="center" px={{ base: 1, md: 6 }}>
-      <Heading as="h1" size="xl">
+    <div className="flex flex-col items-center space-y-4 px-1 md:px-6">
+      <h1 className="text-4xl font-bold text-center">
         Assets Directory
-      </Heading>
-      <Text color="gray.600" maxW="4xl" textAlign="center">
+      </h1>
+      <p className="text-gray-600 max-w-4xl text-center">
         Explore a comprehensive directory of assets, curated from various
         trusted providers including{" "}
         {providers?.map((provider, index, array) =>
@@ -177,10 +151,14 @@ export default function Assets() {
         )}{" "}
         Discover and manage assets efficiently in one unified location. For
         specific assets not listed, please use the search section.
-      </Text>
-      <Skeleton height={"full"} isLoaded={!isLoading} width="full">
-        <AssetsTable assets={assets} />
-      </Skeleton>
-    </VStack>
+      </p>
+      <div className={`w-full ${isLoading ? 'animate-pulse' : ''}`}>
+        {isLoading ? (
+          <div className="bg-gray-200 h-96 rounded-lg"></div>
+        ) : (
+          <AssetsTable assets={assets} />
+        )}
+      </div>
+    </div>
   );
 }

@@ -1,31 +1,17 @@
-import { Box, Card, Text, VStack } from "@chakra-ui/react";
 import { useSorobanReact } from "@soroban-react/core";
 import { ConnectWalletButton } from "../Buttons/ConnectWalletButton";
 
 export const ConnectWalletToUse = () => {
   const { address } = useSorobanReact();
   return (
-    <Box
-      hidden={Boolean(address)}
-      position="absolute"
-      top={0}
-      left={0}
-      right={0}
-      bottom={0}
-      backdropFilter="blur(4px)"
-      zIndex={1}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      rounded="2xl"
-      padding={6}
+    <div
+      className={`${address ? 'hidden' : ''} absolute inset-0 backdrop-blur-sm z-10 flex items-center justify-center rounded-2xl p-6`}
     >
-      <Card bg={"Background"} rounded={"2xl"} textAlign={"center"} p={4}>
-        <VStack spacing={2}>
-          {/* <Text fontSize="xl">Connect Wallet to use</Text> */}
+      <div className="bg-white rounded-2xl text-center p-4">
+        <div className="flex flex-col space-y-2">
           <ConnectWalletButton />
-        </VStack>
-      </Card>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 };

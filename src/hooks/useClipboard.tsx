@@ -1,8 +1,6 @@
-import { useToast } from "@chakra-ui/react";
+import toast from "react-hot-toast";
 
 export const useClipboard = () => {
-  const toast = useToast();
-
   const copyToClipboard = async (
     text?: string,
     successMessage = "Copied!",
@@ -11,23 +9,9 @@ export const useClipboard = () => {
     if (!text) return;
     try {
       await navigator.clipboard.writeText(text);
-      toast({
-        title: "Success",
-        description: successMessage,
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-        position: "bottom-right",
-      });
+      toast.success(successMessage);
     } catch (err) {
-      toast({
-        title: "Error",
-        description: errorMessage,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-        position: "bottom-right",
-      });
+      toast.error(errorMessage);
     }
   };
 

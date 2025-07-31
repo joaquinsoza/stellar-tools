@@ -1,18 +1,4 @@
 "use client";
-import {
-  Box,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Spinner,
-  Text,
-  Skeleton,
-  Image,
-  Button,
-} from "@chakra-ui/react";
 import { usePoolsForAsset } from "@/hooks/usePools";
 import React, { useEffect, useRef } from "react";
 import {
@@ -65,84 +51,74 @@ export function DexPoolTable({ asset }: DexPoolTableProps) {
   }, [pools]);
 
   return (
-    <Box
+    <div
       ref={scrollRef}
-      maxHeight={400}
-      maxWidth={1300}
-      overflowY="auto"
-      borderWidth="1px"
-      borderRadius="lg"
-      padding="4"
+      className="max-h-96 max-w-7xl overflow-y-auto border border-gray-200 rounded-lg p-4"
+      onScroll={handleScroll}
     >
       {isInitialLoad && loading ? (
-        <Box>
+        <div>
           {Array.from({ length: 5 }).map((_, index) => (
-            <Skeleton height="40px" my="10px" key={index} />
+            <div key={index} className="h-10 bg-gray-200 rounded animate-pulse my-2" />
           ))}
-        </Box>
+        </div>
       ) : (
-        <Table variant="simple">
-          <Thead bg="Background">
-            <Tr>
-              <Th>
-                <Image
+        <table className="min-w-full bg-white">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <img
                   src="/images/stellarx.svg"
                   alt="StellarX"
                   width={20}
                   height={20}
                 />
-              </Th>
-              <Th>Pair</Th>
-              <Th>Price</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pair</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
             {pools.length > 0 ? (
               pools.map((pool) => (
-                <Tr
+                <tr
                   key={pool.id}
-                  cursor="pointer"
-                  bg="Background"
-                  _hover={{ background: "ButtonFace" }}
+                  className="cursor-pointer hover:bg-gray-50"
                 >
-                  <Td>
-                    <Button
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button
                       onClick={() =>
                         window.open(
                           generateStellarXUrl(pool.reserves),
                           "_blank"
                         )
                       }
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                     >
                       view on StellarX
-                    </Button>
-                  </Td>
-                  <Td>{getAssetPair(pool.reserves)}</Td>
-                  <Td>{calculatePrice(pool.reserves)}</Td>
-                </Tr>
+                    </button>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{getAssetPair(pool.reserves)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{calculatePrice(pool.reserves)}</td>
+                </tr>
               ))
             ) : (
-              <Tr>
-                <Td colSpan={5}>
-                  <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    height="100%"
-                  >
-                    <Text>Actually dont have pools.</Text>
-                  </Box>
-                </Td>
-              </Tr>
+              <tr>
+                <td colSpan={3}>
+                  <div className="flex justify-center items-center h-full py-8">
+                    <span className="text-gray-500">Actually dont have pools.</span>
+                  </div>
+                </td>
+              </tr>
             )}
-          </Tbody>
-        </Table>
+          </tbody>
+        </table>
       )}
       {loading && !isInitialLoad && (
-        <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
-          <Spinner size="md" />
-        </Box>
+        <div className="flex justify-center items-center mt-4">
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+        </div>
       )}
-    </Box>
+    </div>
   );
 }

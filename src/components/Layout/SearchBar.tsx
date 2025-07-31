@@ -1,37 +1,33 @@
 "use client";
-import React, { useState, useMemo, useRef } from "react";
-import {
-  InputGroup,
-  InputLeftElement,
-  Input,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Box,
-  Text,
-  useOutsideClick,
-  useDisclosure,
-  Avatar,
-  Flex,
-} from "@chakra-ui/react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { useMergedAssetLists } from "@/hooks/useMergedAssetsList";
 import Link from "next/link";
 import { Asset } from "@stellar-asset-lists/sdk";
+import Image from "next/image";
 
 const SearchBar = () => {
   const { assets } = useMergedAssetLists();
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  
+  const popoverRef = useRef<HTMLDivElement>(null);
 
-  const popoverRef = useRef(null);
-  useOutsideClick({
-    ref: popoverRef,
-    handler: onClose,
-  });
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const filteredAssets = useMemo(() => {
-    return assets?.filter((asset) => {
+    return assets?.filter((asset: Asset) => {
       // Normalize search term and asset properties for case-insensitive comparison
       const term = searchTerm.toLowerCase();
       const matchesCodeIssuer =
@@ -43,7 +39,7 @@ const SearchBar = () => {
       const matchesName = asset.name?.toLowerCase().includes(term);
       const matchesDomain = asset.domain?.toLowerCase().includes(term);
 
-      //TODO: if no matches llok in the blockchain with useAsset or similar
+      //TODO: if no matches look in the blockchain with useAsset or similar
 
       return (
         matchesCodeIssuer ||
@@ -65,63 +61,75 @@ const SearchBar = () => {
     return "#"; // Placeholder: adjust according to logic
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <Box ref={popoverRef} w={"full"}>
-      <Popover
-        isOpen={filteredAssets?.length! > 0 && searchTerm.length > 0 && isOpen}
-        placement="bottom-start"
-        autoFocus={false}
-        closeOnBlur
-        closeOnEsc
-      >
-        <PopoverTrigger>
-          <InputGroup>
-            <InputLeftElement pointerEvents="none">
-              <IoMdSearch color="gray.300" />
-            </InputLeftElement>
-            <Input
-              type="text"
-              placeholder="Type address, symbol, CODE:ISSUER"
-              value={searchTerm}
-              onChange={(e) => [onOpen(), setSearchTerm(e.target.value)]}
-            />
-          </InputGroup>
-        </PopoverTrigger>
-        <PopoverContent width="auto" maxWidth="100%">
-          <Box p={4}>
-            {filteredAssets?.map((asset, index) => (
-              <Link key={index} href={getRedirectUrl(asset)} onClick={onClose}>
-                <Flex
-                  key={index}
-                  paddingY="2"
-                  alignItems={"center"}
-                  justifyContent={"flex-start"}
-                  gap={4}
-                  borderBottomWidth="1px"
-                  borderBottomColor={"gray.200"}
-                >
-                  <Avatar src={asset.icon}></Avatar>
-                  <Box>
-                    <Flex gap={2} alignItems={"center"}>
+    <div ref={popoverRef} className="w-full relative">
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <IoMdSearch className="w-5 h-5 text-gray-400" />
+        </div>
+        <input
+          type="text"
+          placeholder="Type address, symbol, CODE:ISSUER"
+          value={searchTerm}
+          onChange={handleInputChange}
+          className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md leading-5 bg-white dark:bg-gray-800 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
+        />
+      </div>
+
+      {/* Dropdown Results */}
+      {filteredAssets && filteredAssets.length > 0 && searchTerm.length > 0 && isOpen && (
+        <div className="absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 shadow-lg max-h-60 rounded-md border border-gray-200 dark:border-gray-600 overflow-auto">
+          <div className="p-4">
+            {filteredAssets.map((asset: Asset, index: number) => (
+              <Link key={index} href={getRedirectUrl(asset)} onClick={handleClose}>
+                <div className="flex py-2 items-center justify-start gap-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                  <div className="flex-shrink-0">
+                    {asset.icon ? (
+                      <Image 
+                        src={asset.icon} 
+                        alt={asset.name || asset.code} 
+                        width={40} 
+                        height={40} 
+                        className="rounded-full"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                          {(asset.name || asset.code)?.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex gap-2 items-center">
                       {asset.name ? (
                         <>
-                          <Text fontWeight="bold">{asset.name}</Text>
-                          <Text fontSize="xs">{asset.code}</Text>
+                          <span className="font-bold text-gray-900 dark:text-gray-100">{asset.name}</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400">{asset.code}</span>
                         </>
                       ) : (
-                        <Text fontWeight="bold">{asset.code}</Text>
+                        <span className="font-bold text-gray-900 dark:text-gray-100">{asset.code}</span>
                       )}
-                    </Flex>
-                    <Text fontSize="sm">{asset.domain}</Text>
-                    <Text fontSize="sm">{asset.contract}</Text>
-                  </Box>
-                </Flex>
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">{asset.domain}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-500 truncate">{asset.contract}</div>
+                  </div>
+                </div>
               </Link>
             ))}
-          </Box>
-        </PopoverContent>
-      </Popover>
-    </Box>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

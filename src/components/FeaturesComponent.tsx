@@ -1,14 +1,5 @@
 "use client";
-import {
-  Box,
-  SimpleGrid,
-  Icon,
-  Text,
-  Stack,
-  useColorModeValue,
-  Flex,
-} from "@chakra-ui/react";
-import { Image } from "@chakra-ui/next-js";
+import Image from "next/image";
 
 interface FeatureCardProps {
   icon: string;
@@ -18,27 +9,19 @@ interface FeatureCardProps {
 
 const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
   return (
-    <Stack
-      p={4}
-      bg={useColorModeValue("white", "gray.700")}
-      boxShadow={"md"}
-      rounded={"xl"}
-      align={"center"}
-      textAlign={"center"}
-      spacing={3}
-    >
+    <div className="p-4 bg-white shadow-md rounded-xl flex flex-col items-center text-center space-y-3">
       <Image
         alt={title}
         src={icon}
-        width={10}
-        height={10}
-        color={useColorModeValue("pink.500", "pink.300")}
+        width={40}
+        height={40}
+        className="text-pink-500"
       />
-      <Text fontWeight={600}>{title}</Text>
-      <Text color={useColorModeValue("gray.600", "gray.400")}>
+      <h3 className="font-semibold">{title}</h3>
+      <p className="text-gray-600">
         {description}
-      </Text>
-    </Stack>
+      </p>
+    </div>
   );
 };
 
@@ -62,19 +45,19 @@ const FeaturesComponent = () => {
   ];
 
   return (
-    <Box py={6} maxW="4xl" mx="auto">
-      <Flex flexDirection={"column"} alignItems={"center"} gap={4}>
-        <Text fontSize={"3xl"} textAlign="center">
+    <div className="py-6 max-w-4xl mx-auto">
+      <div className="flex flex-col items-center gap-4">
+        <h2 className="text-3xl text-center">
           A Suite of Tools for Stellar
-        </Text>
-        <Text fontSize={"md"} textAlign="center">
+        </h2>
+        <p className="text-base text-center">
           Discover a versatile toolkit for the Stellar/Soroban ecosystem,
           designed to streamline asset creation, account management, and more.
           Embrace the simplicity of blockchain technology, made accessible for
           everyone.
-        </Text>
-      </Flex>
-      <SimpleGrid columns={{ base: 1, md: 3, lg: 3 }} spacing={5} mt={10}>
+        </p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-5 mt-10">
         {features.map((feature, index) => (
           <FeatureCard
             key={index}
@@ -83,8 +66,8 @@ const FeaturesComponent = () => {
             description={feature.description}
           />
         ))}
-      </SimpleGrid>
-    </Box>
+      </div>
+    </div>
   );
 };
 

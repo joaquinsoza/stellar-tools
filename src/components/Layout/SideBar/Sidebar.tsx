@@ -1,25 +1,15 @@
 "use client";
 
-import {
-  Box,
-  CloseButton,
-  Flex,
-  useColorModeValue,
-  BoxProps,
-  VStack,
-  HStack,
-  Heading,
-} from "@chakra-ui/react";
-import { FiHome } from "react-icons/fi";
+import { FiHome, FiX } from "react-icons/fi";
 import { IconType } from "react-icons";
-import { Image } from "@chakra-ui/next-js";
+import Image from "next/image";
 import React, { useContext } from "react";
 import { BiCoinStack } from "react-icons/bi";
 import Link from "next/link";
 import { FaDiscord, FaGithub } from "react-icons/fa";
 import { NavItem } from "./NavItem";
 import { SidebarContext } from "@/context/sidebar/SidebarContext";
-import { IoContract, IoReceiptOutline } from "react-icons/io5";
+import { IoReceiptOutline } from "react-icons/io5";
 import { RiContractLine } from "react-icons/ri";
 
 interface LinkItemProps {
@@ -41,85 +31,82 @@ const LinkItems: Array<LinkItemProps> = [
   },
 ];
 
-interface SidebarProps extends BoxProps {
+interface SidebarProps {
   onClose: () => void;
+  className?: string;
 }
 
-export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-  const { isOpen, setIsOpen } = useContext(SidebarContext); // we will use context to manage the sidebar state
+export const SidebarContent = ({ onClose, className = "", ...rest }: SidebarProps) => {
+  const { isOpen, setIsOpen } = useContext(SidebarContext);
 
   return (
-    <Box
-      transition="width 0.3s ease"
-      bg={useColorModeValue("white", "gray.900")}
-      borderRight="1px"
-      borderRightColor={useColorModeValue("gray.200", "gray.700")}
-      w={{ base: "full", md: `${isOpen ? "60" : "20"}` }}
+    <div
+      className={`
+        transition-all duration-300 ease-in-out
+        bg-white dark:bg-gray-900
+        border-r border-gray-200 dark:border-gray-700
+        ${isOpen ? 'w-60' : 'w-20'}
+        md:${isOpen ? 'w-60' : 'w-20'}
+        base:w-full
+        fixed h-full overflow-hidden z-50
+        ${className}
+      `}
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
-      pos="fixed"
-      h="full"
-      overflow="hidden"
       {...rest}
     >
-      <Flex
-        h="20"
-        alignItems="center"
-        pl="5"
-        justifyContent="space-between"
-        borderBottomWidth="1px"
-        borderBottomColor={useColorModeValue("gray.200", "gray.700")}
-      >
-        <Flex align="center" gap={4} borderRadius="lg">
+      <div className="flex h-20 items-center pl-5 justify-between border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-4 rounded-lg">
           <Image
             width={45}
             height={45}
             alt="StellarTools"
-            src={"/stellartools.svg"}
+            src="/stellartools.svg"
           />
-          <Heading
-            fontFamily={"roboto"}
-            fontSize={"lg"}
-            whiteSpace="nowrap"
-            overflow="hidden"
-            textOverflow="clip"
-          >
+          <h1 className="font-roboto text-lg font-medium whitespace-nowrap overflow-hidden">
             STELLAR TOOLS
-          </Heading>
-        </Flex>
-        <CloseButton
-          display={{ base: "flex", md: "none" }}
-          mr={8}
+          </h1>
+        </div>
+        <button
+          className="flex md:hidden mr-8 p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
           onClick={onClose}
-        />
-      </Flex>
-      <Box py={4}>
+        >
+          <FiX className="w-5 h-5" />
+        </button>
+      </div>
+      
+      <div className="py-4">
         {LinkItems.map((link) => (
           <NavItem
             key={link.name}
             icon={link.icon}
             href={link.href}
             requiresWallet={link.requiresWallet}
-            overflow={"hidden"}
             onClick={onClose}
           >
             {link.name}
           </NavItem>
         ))}
-      </Box>
-      <VStack position="absolute" bottom="0" w="full">
-        <HStack justifyContent="center" spacing={4} pb={4}>
+      </div>
+      
+      <div className="absolute bottom-0 w-full">
+        <div className="flex justify-center space-x-4 pb-4">
           <Link
             href="https://github.com/joaquinsoza/stellar-tools"
             target="_blank"
+            className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
           >
-            <FaGithub fontSize="1.5rem" />
+            <FaGithub className="w-6 h-6" />
           </Link>
-          <Link href="https://discord.gg/Bq8qSteFSz" target="_blank">
-            <FaDiscord fontSize="1.5rem" />
+          <Link 
+            href="https://discord.gg/Bq8qSteFSz" 
+            target="_blank"
+            className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+          >
+            <FaDiscord className="w-6 h-6" />
           </Link>
-        </HStack>
-      </VStack>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 };

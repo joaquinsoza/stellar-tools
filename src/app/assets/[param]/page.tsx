@@ -1,14 +1,5 @@
 "use client";
-import {
-  Text,
-  Grid,
-  GridItem,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-} from "@chakra-ui/react";
+import { Tab } from "@headlessui/react";
 import { AssetActionPanel } from "@/components/Assets/AssetActionPanel";
 import { AssetCard } from "@/components/Assets/AssetCard";
 import { isAddress, isCodeIssuerPair } from "@/helpers/address";
@@ -22,6 +13,7 @@ import { useParams } from "next/navigation";
 import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 import { DexPoolTable } from "@/components/Assets/pools/DexPoolTable";
 import { AssetInfo } from "@/components/Assets/tabs/info/AssetInfo";
+import { CommingSoon } from "@/components/DisabledComponents/CommingSoon";
 
 type PoolsTable = {
   asset?: AssetType;
@@ -29,13 +21,13 @@ type PoolsTable = {
 
 const PoolsTable = ({ asset }: PoolsTable) => {
   return (
-    <TabPanel>
+    <Tab.Panel>
       {asset ? (
         <DexPoolTable asset={asset} />
       ) : (
-        <Text>Select an asset to view pools.</Text>
+        <p className="text-gray-600">Select an asset to view pools.</p>
       )}
-    </TabPanel>
+    </Tab.Panel>
   );
 };
 
@@ -71,24 +63,9 @@ export default function Asset() {
   // Example on how to get the pools, TODO: Make it so it can do an infinite scroll... more details in Issue #3
 
   return (
-    <Grid
-      templateAreas={{
-        base: `
-          "info"
-          "moreInfo"
-          "actions"
-          "transactions"
-        `,
-        md: `
-          "info actions"
-          "moreInfo actions"
-          "transactions transactions"
-        `,
-      }}
-      gridTemplateColumns={{ md: "4fr 1fr" }}
-      gap={4}
-    >
-      <GridItem gridArea="info">
+    <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      {/* Asset Card */}
+      <div className="md:col-span-4">
         <AssetCard
           name={name}
           icon={asset?.icon}
@@ -97,47 +74,71 @@ export default function Asset() {
           domain={asset?.domain}
           issuer={issuer}
         />
-      </GridItem>
-      <GridItem gridArea="actions">
+      </div>
+      
+      {/* Action Panel */}
+      <div className="md:col-span-1 md:row-span-2">
         <AssetActionPanel asset={asset} />
-      </GridItem>
-      <GridItem gridArea="moreInfo">
-        <Tabs
-          rounded="2xl"
-          width="100%"
-          height="100%"
-          bg={"Background"}
-          colorScheme="pink"
-        >
-          <TabList>
-            <Tab>Info</Tab>
-            <Tab>Pools</Tab>
-            <Tab>Transactions</Tab>
-          </TabList>
-          <TabPanels minHeight={400}>
-            <TabPanel>
-              <AssetInfo
-                asset={asset!}
-                assetInformation={assetInformation}
-                issuer={issuer}
-              />
-            </TabPanel>
-            <PoolsTable asset={asset!} />
-            <TabPanel>
-              <Box position="relative" p={4} height={400}>
-                <Stack spacing={3}>
-                  {temporalSkeletons.map((i) => (
-                    <Skeleton height="35px" key={i} speed={2} />
-                  ))}
-                </Stack>
-                <Stack maxHeight={400}>
-                  <CommingSoon />
-                </Stack>
-              </Box>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </GridItem>
-    </Grid>
+      </div>
+      
+      {/* Tabs Section */}
+      <div className="md:col-span-4">
+        <Tab.Group>
+          <div className="bg-white rounded-2xl w-full h-full">
+            <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
+              <Tab className={({ selected }) =>
+                `w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700 ${
+                  selected
+                    ? 'bg-white shadow'
+                    : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
+                }`
+              }>
+                Info
+              </Tab>
+              <Tab className={({ selected }) =>
+                `w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700 ${
+                  selected
+                    ? 'bg-white shadow'
+                    : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
+                }`
+              }>
+                Pools
+              </Tab>
+              <Tab className={({ selected }) =>
+                `w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700 ${
+                  selected
+                    ? 'bg-white shadow'
+                    : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
+                }`
+              }>
+                Transactions
+              </Tab>
+            </Tab.List>
+            <Tab.Panels className="min-h-[400px]">
+              <Tab.Panel>
+                <AssetInfo
+                  asset={asset!}
+                  assetInformation={assetInformation}
+                  issuer={issuer}
+                />
+              </Tab.Panel>
+              <PoolsTable asset={asset!} />
+              <Tab.Panel>
+                <div className="relative p-4 h-96">
+                  <div className="space-y-3">
+                    {temporalSkeletons.map((i) => (
+                      <div key={i} className="h-8 bg-gray-200 rounded animate-pulse" />
+                    ))}
+                  </div>
+                  <div className="max-h-96">
+                    <CommingSoon />
+                  </div>
+                </div>
+              </Tab.Panel>
+            </Tab.Panels>
+          </div>
+        </Tab.Group>
+      </div>
+    </div>
   );
 }

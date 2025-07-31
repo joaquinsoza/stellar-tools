@@ -1,23 +1,4 @@
 "use client";
-import {
-  Box,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Button,
-  Flex,
-  Link as ChakraLink,
-  ButtonGroup,
-  Skeleton,
-  Avatar,
-  Text,
-  VStack,
-  Heading,
-  useMediaQuery,
-} from "@chakra-ui/react";
 import { useMergedAssetLists } from "@/hooks/useMergedAssetsList";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -66,24 +47,27 @@ const Pagination = ({
   }
 
   return (
-    <ButtonGroup variant="outline">
+    <div className="flex gap-1">
       {Array.from({ length: endPage - startPage + 1 }, (_, i) => (
-        <Button
+        <button
           key={startPage + i}
           onClick={() => onPageChange(startPage + i)}
-          isActive={currentPage === startPage + i}
+          className={`px-3 py-2 border rounded-md transition-colors ${
+            currentPage === startPage + i
+              ? 'bg-blue-500 text-white border-blue-500'
+              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+          }`}
         >
           {startPage + i}
-        </Button>
+        </button>
       ))}
-    </ButtonGroup>
+    </div>
   );
 };
 
 const PaymentsTable = ({ payments }: { payments: any[] | undefined }) => {
   const [assetsPerPage, setAssetsPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
   const router = useRouter();
   if (!payments) return;
 
@@ -95,89 +79,77 @@ const PaymentsTable = ({ payments }: { payments: any[] | undefined }) => {
   const changePage = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
-    <Box>
-      <Table variant="simple">
-        <Thead bg={"Background"}>
-          <Tr>
-            {isMobile ? (
-              <>
-                <Th>Date</Th>
-                <Th>Code</Th>
-                <Th>TxHash</Th>
-              </>
-            ) : (
-              <>
-                <Th>Date</Th>
-                <Th>Type</Th>
-                <Th>Code</Th>
-                <Th>From</Th>
-                <Th>To</Th>
-                <Th>Amount</Th>
-                <Th>TxHash</Th>
-              </>
-            )}
-          </Tr>
-        </Thead>
-        <Tbody>
-          {currentPayments.map((payment) => {
-            const created_at = new Date(payment.created_at).toLocaleString(
-              undefined,
-              {
-                day: "numeric",
-                month: "short",
-                year: "2-digit",
-              }
-            );
-            return (
-              <Tr
-                key={payment.id}
-                onClick={() =>
-                  window.open(
-                    `https://stellar.expert/explorer/public/tx/${payment.transaction_hash}`
-                  )
+    <div>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Type</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">From</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">To</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Amount</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">TxHash</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {currentPayments.map((payment) => {
+              const created_at = new Date(payment.created_at).toLocaleString(
+                undefined,
+                {
+                  day: "numeric",
+                  month: "short",
+                  year: "2-digit",
                 }
-                cursor="pointer"
-                bg={"Background"}
-                _hover={{ background: "ButtonFace" }}
-              >
-                {isMobile ? (
-                  <>
-                    <Td>{created_at}</Td>
-                    <Td>
-                      {payment.asset_type === "native"
-                        ? "XLM"
-                        : payment.asset_code}
-                    </Td>
-                    <Td>{payment.transaction_hash}</Td>
-                  </>
-                ) : (
-                  <>
-                    <Td>{created_at}</Td>
-                    <Td>{payment.type}</Td>
-                    <Td>
-                      {payment.asset_type === "native"
-                        ? "XLM"
-                        : payment.asset_code}
-                    </Td>
-                    <Td>{shortenAddress(payment.from)}</Td>
-                    <Td>{shortenAddress(payment.to)}</Td>
-                    <Td>{payment.amount}</Td>
-                    <Td>{shortenText(payment.transaction_hash)}</Td>
-                  </>
-                )}
-              </Tr>
-            );
-          })}
-        </Tbody>
-      </Table>
-      <Flex justifyContent="center" mt={4}>
+              );
+              return (
+                <tr
+                  key={payment.id}
+                  onClick={() =>
+                    window.open(
+                      `https://stellar.expert/explorer/public/tx/${payment.transaction_hash}`
+                    )
+                  }
+                  className="cursor-pointer hover:bg-gray-50 transition-colors"
+                >
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {created_at}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
+                    {payment.type}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {payment.asset_type === "native"
+                      ? "XLM"
+                      : payment.asset_code}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
+                    {shortenAddress(payment.from)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
+                    {shortenAddress(payment.to)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
+                    {payment.amount}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {shortenText(payment.transaction_hash)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <div className="flex justify-center mt-4">
         <Pagination
           totalPages={totalPages}
           currentPage={currentPage}
           onPageChange={changePage}
         />
-      </Flex>
-    </Box>
+      </div>
+    </div>
   );
 };
 
@@ -186,17 +158,21 @@ export default function TransactionsPage() {
     useTransactionHistory();
 
   return (
-    <VStack spacing={4} align="center" px={{ base: 1, md: 6 }}>
-      <Heading as="h1" size="xl">
+    <div className="flex flex-col items-center space-y-4 px-1 md:px-6">
+      <h1 className="text-4xl font-bold text-center">
         Transactions
-      </Heading>
-      <Text color="gray.600" maxW="4xl" textAlign="center">
+      </h1>
+      <p className="text-gray-600 max-w-4xl text-center">
         take a look at your transactions history and export to any format you
         might need
-      </Text>
-      <Skeleton height={"full"} isLoaded={!isLoading} width="full">
-        <PaymentsTable payments={payments} />
-      </Skeleton>
-    </VStack>
+      </p>
+      <div className={`w-full ${isLoading ? 'animate-pulse' : ''}`}>
+        {isLoading ? (
+          <div className="bg-gray-200 h-96 rounded-lg"></div>
+        ) : (
+          <PaymentsTable payments={payments} />
+        )}
+      </div>
+    </div>
   );
 }

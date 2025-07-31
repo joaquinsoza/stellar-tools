@@ -1,90 +1,94 @@
 "use client";
 
-import {
-  Box,
-  Flex,
-  Button,
-  useColorModeValue,
-  Stack,
-  useColorMode,
-  IconButton,
-  FlexProps,
-} from "@chakra-ui/react";
 import { BiMoon, BiSun } from "react-icons/bi";
 import SearchBar from "./SearchBar";
 import { FiMenu } from "react-icons/fi";
-import { Image } from "@chakra-ui/next-js";
-import { useContext } from "react";
+import Image from "next/image";
+import { useContext, useEffect, useState } from "react";
 
 import { ConnectWalletButton } from "../Buttons/ConnectWalletButton";
 import { useSorobanReact } from "@soroban-react/core";
 import { ConnectedWallet } from "../ConnectedWallet";
 import { SidebarContext } from "@/context/sidebar/SidebarContext";
 
-interface Props {
-  children: React.ReactNode;
-}
-
-interface NavProps extends FlexProps {
+interface NavProps {
   onOpen: () => void;
 }
 
 export default function Nav({ onOpen, ...rest }: NavProps) {
   const { address } = useSorobanReact();
-  const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen } = useContext(SidebarContext);
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    // Check for saved theme preference or default to light mode
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      setDarkMode(true);
+      document.documentElement.classList.add('dark');
+    } else {
+      setDarkMode(false);
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    if (darkMode) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      setDarkMode(false);
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      setDarkMode(true);
+    }
+  };
 
   return (
-    <Box
-      position="fixed"
-      w="full"
-      bg={useColorModeValue("white", "gray.900")}
-      px={4}
-      py={2}
-      h={20}
-      pl={{ base: "full", md: `${isOpen ? "64" : "24"}` }}
-      transition="padding-left 0.3s ease"
-      borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue("gray.200", "gray.700")}
+    <nav
+      className={`
+        fixed w-full bg-white dark:bg-gray-900 px-4 py-2 h-20 z-50
+        transition-all duration-300 ease-in-out
+        border-b border-gray-200 dark:border-gray-700
+        ${isOpen ? 'md:pl-64' : 'md:pl-24'} pl-4
+      `}
       {...rest}
     >
-      <Flex
-        h={16}
-        alignItems={"center"}
-        justifyContent={{ base: "space-between", md: "space-between" }}
-        w={"full"}
-      >
-        <Box w={"50%"} display={{ base: "none", md: "flex" }}>
+      <div className="flex h-16 items-center justify-between w-full">
+        <div className="w-1/2 hidden md:flex">
           <SearchBar />
-        </Box>
-        <Image
-          display={{ base: "flex", md: "none" }}
-          alt="StellarTools"
-          width={35}
-          height={35}
-          src={"/stellartools.svg"}
-        />
-        <Stack
-          direction={"row"}
-          spacing={{ base: 1, md: 4 }}
-          alignItems={"center"}
-        >
-          <Button
-            display={{ base: "none", md: "flex" }}
-            onClick={toggleColorMode}
-          >
-            {colorMode === "light" ? <BiMoon /> : <BiSun />}
-          </Button>
-          {address ? <ConnectedWallet /> : <ConnectWalletButton />}
-          <IconButton
-            display={{ base: "flex", md: "none" }}
-            onClick={onOpen}
-            variant="outline"
-            aria-label="open menu"
-            icon={<FiMenu />}
+        </div>
+        
+        <div className="flex md:hidden">
+          <Image
+            alt="StellarTools"
+            width={35}
+            height={35}
+            src="/stellartools.svg"
           />
-        </Stack>
-      </Flex>
-    </Box>
+        </div>
+
+        <div className="flex items-center space-x-1 md:space-x-4">
+          <button
+            className="hidden md:flex items-center justify-center p-2 rounded-md bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+            onClick={toggleDarkMode}
+          >
+            {darkMode ? <BiSun className="w-5 h-5" /> : <BiMoon className="w-5 h-5" />}
+          </button>
+          
+          {address ? <ConnectedWallet /> : <ConnectWalletButton />}
+          
+          <button
+            className="flex md:hidden p-2 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800"
+            onClick={onOpen}
+            aria-label="open menu"
+          >
+            <FiMenu className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+    </nav>
   );
 }
