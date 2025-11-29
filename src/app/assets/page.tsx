@@ -1,5 +1,5 @@
 "use client";
-import { useMergedAssetLists } from "@/hooks/useMergedAssetsList";
+import { useTokens } from "@/hooks/useTokens";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { shortenAddress } from "@/helpers/address";
@@ -133,7 +133,7 @@ const AssetsTable = ({ assets }: { assets: any[] | undefined }) => {
 };
 
 export default function Assets() {
-  const { providers, assets, isLoading } = useMergedAssetLists();
+  const { tokens, isLoading } = useTokens();
 
   return (
     <div className="flex flex-col items-center space-y-4 px-1 md:px-6">
@@ -141,13 +141,7 @@ export default function Assets() {
         Assets Directory
       </h1>
       <p className="text-gray-600 dark:text-gray-400 max-w-4xl text-center">
-        Explore a comprehensive directory of assets, curated from various
-        trusted providers including{" "}
-        {providers?.map((provider: any, index:any, array:any) =>
-          index === array.length - 1
-            ? `and ${provider.provider}.`
-            : `${provider.provider}, `
-        )}{" "}
+        Explore a comprehensive directory of assets from the Soroswap ecosystem.
         Discover and manage assets efficiently in one unified location. For
         specific assets not listed, please use the search section.
       </p>
@@ -155,7 +149,7 @@ export default function Assets() {
         {isLoading ? (
           <div className="bg-gray-200 dark:bg-gray-700 h-96 rounded-lg"></div>
         ) : (
-          <AssetsTable assets={assets} />
+          <AssetsTable assets={tokens} />
         )}
       </div>
     </div>

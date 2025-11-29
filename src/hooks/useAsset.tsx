@@ -1,4 +1,4 @@
-import { useMergedAssetLists, AssetType } from "./useMergedAssetsList";
+import { useTokens, AssetType } from "./useTokens";
 import { useEffect, useState } from "react";
 
 export interface UseAssetProps {
@@ -20,15 +20,15 @@ export function useAsset({
   code,
   issuer,
 }: UseAssetProps): AssetType | undefined {
-  const { assets } = useMergedAssetLists();
+  const { tokens } = useTokens();
   const [asset, setAsset] = useState<AssetType | undefined>(undefined);
 
   useEffect(() => {
-    if (!assets) return;
+    if (!tokens || tokens.length === 0) return;
 
     // Find asset by contract
     if (contract) {
-      const foundAsset = assets.find((ast: AssetType) => ast.contract === contract);
+      const foundAsset = tokens.find((ast: AssetType) => ast.contract === contract);
       if (foundAsset) {
         setAsset(foundAsset);
         return;
@@ -37,7 +37,7 @@ export function useAsset({
 
     // Find asset by code and issuer
     if (code && issuer) {
-      const foundAsset = assets.find(
+      const foundAsset = tokens.find(
         (ast: AssetType) => ast.code === code && ast.issuer === issuer
       );
       if (foundAsset) {
@@ -48,7 +48,7 @@ export function useAsset({
 
     // Find asset by code only (for XLM)
     if (code && !issuer) {
-      const foundAsset = assets.find((ast: AssetType) => ast.code === code);
+      const foundAsset = tokens.find((ast: AssetType) => ast.code === code);
       if (foundAsset) {
         setAsset(foundAsset);
         return;
@@ -56,7 +56,7 @@ export function useAsset({
     }
 
     setAsset(undefined);
-  }, [contract, code, issuer, assets]);
+  }, [contract, code, issuer, tokens]);
 
   return asset;
 }

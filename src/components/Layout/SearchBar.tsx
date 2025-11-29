@@ -1,12 +1,12 @@
 "use client";
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { IoMdSearch } from "react-icons/io";
-import { useMergedAssetLists } from "@/hooks/useMergedAssetsList";
+import { useTokens } from "@/hooks/useTokens";
 import Link from "next/link";
 import Image from "next/image";
 
 const SearchBar = () => {
-  const { assets } = useMergedAssetLists();
+  const { tokens } = useTokens();
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   
@@ -26,8 +26,7 @@ const SearchBar = () => {
   }, []);
 
   const filteredAssets = useMemo(() => {
-    return assets?.filter((asset: any) => { //TODO: sewt asset type
-      // Normalize search term and asset properties for case-insensitive comparison
+    return tokens?.filter((asset) => {
       const term = searchTerm.toLowerCase();
       const matchesCodeIssuer =
         asset.code && asset.issuer
@@ -38,8 +37,6 @@ const SearchBar = () => {
       const matchesName = asset.name?.toLowerCase().includes(term);
       const matchesDomain = asset.domain?.toLowerCase().includes(term);
 
-      //TODO: if no matches look in the blockchain with useAsset or similar
-
       return (
         matchesCodeIssuer ||
         matchesContract ||
@@ -48,7 +45,7 @@ const SearchBar = () => {
         matchesDomain
       );
     });
-  }, [searchTerm, assets]);
+  }, [searchTerm, tokens]);
 
   const getRedirectUrl = (asset: any) => { // TODO: Set an asset type
     if (asset.contract) {

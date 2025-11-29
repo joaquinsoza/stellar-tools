@@ -1,5 +1,5 @@
 import { useAssetForAccount } from "@/hooks/useAsset";
-import { AssetType } from "@/hooks/useMergedAssetsList";
+import { AssetType } from "@/hooks/useTokens";
 import { ManageTrustlineButton } from "../Buttons/ManageTrustlineButton";
 import { ConnectWalletToUse } from "../DisabledComponents/ConnectWalletToUse";
 import { useState } from "react";

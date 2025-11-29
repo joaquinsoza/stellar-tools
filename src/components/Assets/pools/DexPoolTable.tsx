@@ -1,6 +1,6 @@
 "use client";
 import { usePoolsForAsset } from "@/hooks/usePools";
-import { AssetType } from "@/hooks/useMergedAssetsList";
+import { AssetType } from "@/hooks/useTokens";
 import React, { useRef } from "react";
 
 type DexPoolTableProps = {
