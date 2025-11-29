@@ -26,7 +26,7 @@ This is a Next.js application built for the Stellar ecosystem, providing tools f
 **Wallet & Network Management**:
 - `SorobanContextProvider.tsx` manages wallet connections and network switching
 - Supports mainnet, testnet, and standalone networks based on environment
-- Network selection via `NEXT_PUBLIC_DEFAULT_NETWORK` environment variable
+- Network selection via `NEXT_PUBLIC_NETWORK` environment variable
 
 **Asset Management System**:
 - `useAsset.tsx` hook handles both Stellar classic assets (code/issuer) and Soroban contracts
@@ -59,5 +59,5 @@ The app follows Next.js App Router conventions:
 
 - Production builds use mainnet and testnet networks only
 - Development includes standalone network for local testing
-- Default network configurable via `NEXT_PUBLIC_DEFAULT_NETWORK`
+- Default network configurable via `NEXT_PUBLIC_NETWORK`
 - Soroban RPC endpoint via `NEXT_PUBLIC_SOROBAN_MAINNET_RPC`

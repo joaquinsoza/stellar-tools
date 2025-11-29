@@ -6,11 +6,13 @@ export function isAddress(value: string): string | false {
   }
 }
 
-export function shortenAddress(address: string, chars = 4): string {
+export function shortenAddress(address: string | undefined, chars = 4): string {
   if (!address) return "";
   const parsed = isAddress(address);
   if (!parsed) {
-    throw Error(`Invalid 'address' parameter '${address}'.`);
+    return address.length > chars * 2
+      ? `${address.substring(0, chars)}...${address.substring(address.length - chars)}`
+      : address;
   }
   return `${parsed.substring(0, chars)}...${parsed.substring(56 - chars)}`;
 }

@@ -1,83 +1,40 @@
-import useSWR from "swr";
-import _ from "lodash";
-// @ts-ignore
-import * as StellarAssetListsSdk from "@stellar-asset-lists/sdk";
-import { Asset, Networks } from "@stellar/stellar-sdk";
-import { xlmAsset } from "@/components/constants/xlmAsset";
-import { isAddress } from "@/helpers/address";
-import { SorobanContextType, useSorobanReact } from "@soroban-react/core";
+export interface Payment {
+  id: string;
+  created_at: string;
+  type: string;
+  asset_type: string;
+  asset_code?: string;
+  from: string;
+  to: string;
+  amount: string;
+  transaction_hash: string;
+}
 
 interface AccountHistory {
-  transactions: any[];
-  operations: any[];
-  payments: any[];
+  transactions: unknown[];
+  operations: unknown[];
+  payments: Payment[];
 }
 
+// Mock function - will be replaced with actual Horizon API calls later
 export async function getAccountHistory(
-  sorobanContext: SorobanContextType
+  address: string
 ): Promise<AccountHistory> {
-  const { address, serverHorizon } = sorobanContext;
-  let transactions: any[] = [];
-  let operations: any[] = [];
-  let payments: any[] = [];
-  if (!address || !serverHorizon) return { transactions, operations, payments };
-
-  let transactionPage = await serverHorizon
-    .transactions()
-    .forAccount(address)
-    .order("desc")
-    .limit(200)
-    .call();
-  // while (transactionPage.records.length > 0) {
-  transactions = transactions.concat(transactionPage.records);
-  //   if (transactionPage.records.length < 200) break;
-  //   transactionPage = await transactionPage.next();
-  // }
-
-  let operationPage = await serverHorizon
-    .operations()
-    .forAccount(address)
-    .order("desc")
-    .limit(200)
-    .call();
-  // while (operationPage.records.length > 0) {
-  operations = operations.concat(operationPage.records);
-  //   if (operationPage.records.length < 200) break;
-  //   operationPage = await operationPage.next();
-  // }
-
-  let paymentPage = await serverHorizon
-    .payments()
-    .forAccount(address)
-    .order("desc")
-    .limit(200)
-    .call();
-  // while (paymentPage.records.length > 0) {
-  payments = payments.concat(paymentPage.records as any[]);
-  //   if (paymentPage.records.length < 200) break;
-  //   paymentPage = await paymentPage.next();
-  // }
-
-  return { transactions, operations, payments };
+  return {
+    transactions: [],
+    operations: [],
+    payments: [],
+  };
 }
-
-const fetchAccountHistory = (sorobanContext: SorobanContextType) => () =>
-  getAccountHistory(sorobanContext);
 
 export function useTransactionHistory() {
-  const sorobanContext = useSorobanReact();
-  // Fetch the catalogue using SWR.
-  const { data, error, isLoading, mutate } = useSWR(
-    sorobanContext.address ? `accountHistory-${sorobanContext.address}` : null,
-    sorobanContext ? fetchAccountHistory(sorobanContext) : null
-  );
-
+  // Mock data - will be replaced with actual data fetching later
   return {
-    transactions: data?.transactions,
-    operations: data?.operations,
-    payments: data?.payments,
-    isLoading: isLoading,
-    isError: error,
-    refetch: mutate,
+    transactions: [] as unknown[],
+    operations: [] as unknown[],
+    payments: [] as Payment[],
+    isLoading: false,
+    isError: false,
+    refetch: () => {},
   };
 }

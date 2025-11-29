@@ -1,27 +1,37 @@
-import { useSorobanReact } from "@soroban-react/core";
-import useSWR from "swr";
-
-const fetchAssetOnHorizon = async (
-  code: string,
-  issuer: string,
-  serverHorizon: any
-) => {
-  try {
-    const assetResponse = await serverHorizon
-      .assets()
-      .forCode(code)
-      .forIssuer(issuer)
-      .call();
-    return assetResponse;
-  } catch (err) {
-    throw new Error("Error fetching asset from horizon server");
-  }
-};
-
 export interface UseAssetInformationProps {
   contract?: string;
   code?: string;
   issuer?: string;
+}
+
+export interface AssetInformationData {
+  asset_type: string;
+  asset_code: string;
+  asset_issuer: string;
+  paging_token: string;
+  num_accounts: number;
+  num_claimable_balances: number;
+  amount: string;
+  accounts: {
+    authorized: number;
+    authorized_to_maintain_liabilities: number;
+    unauthorized: number;
+  };
+  claimable_balances_amount: string;
+  liquidity_pools_amount: string;
+  contracts_amount: string;
+  archived_contracts_amount: string;
+  balances: {
+    authorized: string;
+    authorized_to_maintain_liabilities: string;
+    unauthorized: string;
+  };
+  flags: {
+    auth_required: boolean;
+    auth_revocable: boolean;
+    auth_immutable: boolean;
+    auth_clawback_enabled: boolean;
+  };
 }
 
 export function useAssetInformation({
@@ -29,34 +39,10 @@ export function useAssetInformation({
   code,
   issuer,
 }: UseAssetInformationProps) {
-  const { serverHorizon } = useSorobanReact();
-  // TODO: If contract is provided it should also try and get information from Soroban
-  const {
-    data: dataFromHorizon,
-    error,
-    isLoading,
-  } = useSWR(
-    code && issuer && serverHorizon
-      ? ["asset", code, issuer, serverHorizon]
-      : null,
-    () => {
-      if (
-        typeof code === "string" &&
-        typeof issuer === "string" &&
-        serverHorizon
-      ) {
-        return fetchAssetOnHorizon(code, issuer, serverHorizon);
-      }
-      throw new Error("Invalid parameters for fetchAssetOnHorizon");
-    },
-    {
-      shouldRetryOnError: false,
-    }
-  );
-
+  // Mock data - will be replaced with actual Horizon API calls later
   return {
-    data: dataFromHorizon?.records[0],
-    isLoading,
-    error,
+    data: undefined as AssetInformationData | undefined,
+    isLoading: false,
+    error: null,
   };
 }

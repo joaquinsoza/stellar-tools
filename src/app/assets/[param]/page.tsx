@@ -10,13 +10,12 @@ import {
 } from "@/hooks/useAssetInformation";
 import { useClipboard } from "@/hooks/useClipboard";
 import { useParams } from "next/navigation";
-import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 import { DexPoolTable } from "@/components/Assets/pools/DexPoolTable";
 import { AssetInfo } from "@/components/Assets/tabs/info/AssetInfo";
 import { CommingSoon } from "@/components/DisabledComponents/CommingSoon";
 
 type PoolsTable = {
-  asset?: AssetType;
+  asset?: any;
 };
 
 const PoolsTable = ({ asset }: PoolsTable) => {

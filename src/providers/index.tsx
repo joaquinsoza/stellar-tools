@@ -1,11 +1,11 @@
 "use client";
 
-import MySorobanReactProvider from "@/contexts/SorobanContextProvider";
+import { UserProvider } from "@/contexts/UserContext";
 import { Toaster } from "react-hot-toast";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <MySorobanReactProvider>
+    <UserProvider>
       {children}
       <Toaster
         position="top-right"
@@ -27,6 +27,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
           },
         }}
       />
-    </MySorobanReactProvider>
+    </UserProvider>
   );
 }

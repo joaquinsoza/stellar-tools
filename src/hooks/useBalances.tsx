@@ -4,7 +4,7 @@ export const useAccountBalances = () => {
   const { account, isLoading, isError } = useAccount();
 
   return {
-    balances: account?.balances,
+    balances: account?.balances ?? [],
     isLoading,
     isError,
   };

@@ -1,66 +1,48 @@
 "use client";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { isAddress, shortenAddress } from "@/helpers/address";
+import { useState } from "react";
+import { isAddress } from "@/helpers/address";
 import { ButtonPrimary } from "@/components/Buttons/ButtonPrimary";
-import { bumpContractInstance, restoreContract } from "@/helpers/soroban";
-import { useSorobanReact } from "@soroban-react/core";
-import { getContractLedgerInfo } from "@/hooks/useContract";
+import { LedgerContractInfo } from "@/hooks/useContract";
 
 export default function ContractsPage() {
-  const sorobanContext = useSorobanReact();
   const [contractAddress, setContractAddress] = useState<string>("");
   const [isBumping, setIsBumping] = useState<boolean>(false);
-  const [ledgerInfo, setLedgerInfo] = useState<any>(null);
+  const [ledgerInfo, setLedgerInfo] = useState<LedgerContractInfo | null>(null);
   const [loadingInfo, setLoadingInfo] = useState<boolean>(false);
 
   const handleBumpContractInstance = async () => {
     if (!isAddress(contractAddress)) return;
     setIsBumping(true);
-    bumpContractInstance(contractAddress, sorobanContext)
-      .then((resp) => {
-        console.log(resp);
-        toast.success(`Contract TTL extended! You have successfully extended ${shortenAddress(contractAddress)} TTL.`);
-        setIsBumping(false);
-        refetchLedgerInfo(); // Refresh ledger info after bumping
-      })
-      .catch((error) => {
-        console.log("🚀 « error:", error);
-        toast.error(`Error: ${error}`);
-        setIsBumping(false);
-      });
+    // Will be implemented when blockchain integration is added back
+    setTimeout(() => setIsBumping(false), 1000);
   };
 
   const handleRestoreContract = async () => {
     if (!isAddress(contractAddress)) return;
     setIsBumping(true);
-    restoreContract(contractAddress, sorobanContext)
-      .then((resp) => {
-        console.log(resp);
-        toast.success(`Contract restored! You have successfully restored ${shortenAddress(contractAddress)}`);
-        setIsBumping(false);
-        refetchLedgerInfo(); // Refresh ledger info after restoring
-      })
-      .catch((error) => {
-        console.log("🚀 « error:", error);
-        toast.error(`Error: ${error}`);
-        setIsBumping(false);
-      });
+    // Will be implemented when blockchain integration is added back
+    setTimeout(() => setIsBumping(false), 1000);
   };
 
-  const refetchLedgerInfo = async () => {
-    if (!isAddress(contractAddress)) return;
-    setLoadingInfo(true);
-    const info = await getContractLedgerInfo(contractAddress);
-    setLedgerInfo(info);
-    setLoadingInfo(false);
-  };
-
-  useEffect(() => {
-    if (isAddress(contractAddress)) {
-      refetchLedgerInfo();
+  const handleAddressChange = (value: string) => {
+    setContractAddress(value);
+    if (isAddress(value)) {
+      // Mock loading state for UI demonstration
+      setLoadingInfo(true);
+      setTimeout(() => {
+        setLedgerInfo({
+          isActive: true,
+          remaining: "-- Days",
+          expiresOnLedger: undefined,
+          modifiedOnLedger: undefined,
+          currentLedgerSeq: undefined,
+        });
+        setLoadingInfo(false);
+      }, 500);
+    } else {
+      setLedgerInfo(null);
     }
-  }, [contractAddress]);
+  };
 
   return (
     <div className="flex flex-col items-center space-y-6 px-4 md:px-8 py-8">
@@ -127,7 +109,7 @@ export default function ContractsPage() {
             type="text"
             placeholder="Enter Contract Address"
             value={contractAddress}
-            onChange={(e) => setContractAddress(e.target.value)}
+            onChange={(e) => handleAddressChange(e.target.value)}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>

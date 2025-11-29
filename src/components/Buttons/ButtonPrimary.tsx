@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { useSorobanReact } from "@soroban-react/core";
-import { ConnectWalletButton } from "./ConnectWalletButton";
+import { useUserContext } from "@/contexts/UserContext";
+import { ConnectWallet } from "./ConnectWalletButton";
 
 interface ButtonPrimaryProps {
   label: string;
@@ -26,10 +26,10 @@ export function ButtonPrimary({
   variant = "solid",
   isDisabled,
 }: ButtonPrimaryProps) {
-  const { address } = useSorobanReact();
+  const { address } = useUserContext();
 
   if (!address && requiresWallet) {
-    return <ConnectWalletButton />;
+    return <ConnectWallet />;
   }
 
   // Size classes

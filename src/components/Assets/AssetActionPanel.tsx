@@ -1,73 +1,33 @@
 import { useAssetForAccount } from "@/hooks/useAsset";
-import { Asset } from "@stellar-asset-lists/sdk";
+import { AssetType } from "@/hooks/useMergedAssetsList";
 import { ManageTrustlineButton } from "../Buttons/ManageTrustlineButton";
 import { ConnectWalletToUse } from "../DisabledComponents/ConnectWalletToUse";
-import {
-  bumpContractInstance,
-  deployStellarAsset,
-  getTokenDecimals,
-  getTokenName,
-  getTokenSymbol,
-} from "@/helpers/soroban";
-import { useSorobanReact } from "@soroban-react/core";
 import { useState } from "react";
-import { wrapStellarAsset } from "@soroban-react/contracts";
-import { Address, nativeToScVal } from "@stellar/stellar-sdk";
 import { FaWallet } from "react-icons/fa";
-import toast from "react-hot-toast";
 
 interface AssetActionProps {
-  asset?: Asset;
+  asset?: AssetType;
 }
 
 export function AssetActionPanel({ asset }: AssetActionProps) {
-  const sorobanContext = useSorobanReact();
-  const { assetForAccount, isLoading, contractInfo, refetch } =
-    useAssetForAccount(asset);
+  const { assetForAccount, contractInfo } = useAssetForAccount(asset);
 
-  const [isDeployedOnSoroban, setIsDeployedOnSoroban] = useState<boolean>(true);
+  const [isDeployedOnSoroban] = useState<boolean>(true);
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
-
   const [isBumping, setIsBumping] = useState<boolean>(false);
-
-  getTokenName(sorobanContext, asset?.contract).then((resp) =>
-    resp ? setIsDeployedOnSoroban(true) : setIsDeployedOnSoroban(false)
-  );
 
   const handleDeployToSoroban = () => {
     if (!asset?.code || !asset?.issuer) return;
     setIsDeploying(true);
-    deployStellarAsset(asset, sorobanContext)
-      .then((resp) => {
-        console.log("then", resp);
-        toast.success(`Asset deployed! You have successfully deployed ${asset.code} to Soroban.`);
-        refetch();
-        setIsDeploying(false);
-      })
-      .catch((error) => {
-        console.log("🚀 « error:", error);
-        toast.error(`Error: ${error}`);
-        refetch();
-        setIsDeploying(false);
-      });
+    // Will be implemented when blockchain integration is added back
+    setTimeout(() => setIsDeploying(false), 1000);
   };
 
   const handleBumpContractInstance = async () => {
     if (!asset?.contract) return;
     setIsBumping(true);
-    bumpContractInstance(asset?.contract, sorobanContext)
-      .then((resp) => {
-        console.log(resp);
-        toast.success(`Asset TTL extended! You have successfully extended ${asset.code} instance TTL.`);
-        refetch();
-        setIsBumping(false);
-      })
-      .catch((error) => {
-        console.log("🚀 « error:", error);
-        toast.error(`Error: ${error}`);
-        refetch();
-        setIsBumping(false);
-      });
+    // Will be implemented when blockchain integration is added back
+    setTimeout(() => setIsBumping(false), 1000);
   };
 
   return (

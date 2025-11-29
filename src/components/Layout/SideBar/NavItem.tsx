@@ -1,4 +1,4 @@
-import { useSorobanReact } from "@soroban-react/core";
+import { useUserContext } from "@/contexts/UserContext";
 import Link from "next/link";
 import { IconType } from "react-icons";
 
@@ -17,7 +17,7 @@ export const NavItem = ({
   requiresWallet,
   onClick,
 }: NavItemProps) => {
-  const { address } = useSorobanReact();
+  const { address } = useUserContext();
   const isDisabled = requiresWallet && !address;
 
   const content = (

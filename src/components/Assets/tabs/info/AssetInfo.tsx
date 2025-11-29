@@ -1,12 +1,11 @@
 import { FC } from "react";
 import { shortenAddress } from "@/helpers/address";
-import { Asset as AssetType } from "@stellar-asset-lists/sdk";
 import { InfoCard } from "./InfoCard";
 
 type AssetInfoProps = {
-  asset: AssetType;
+  asset: any;
   assetInformation: any;
-  issuer: string;
+  issuer?: string;
 };
 
 export const AssetInfo: FC<AssetInfoProps> = ({

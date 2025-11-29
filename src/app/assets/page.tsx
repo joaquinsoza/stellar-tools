@@ -3,7 +3,6 @@ import { useMergedAssetLists } from "@/hooks/useMergedAssetsList";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { shortenAddress } from "@/helpers/address";
-import { Asset } from "@stellar-asset-lists/sdk";
 
 interface PaginationProps {
   totalPages: number;
@@ -61,7 +60,7 @@ const Pagination = ({
   );
 };
 
-const AssetsTable = ({ assets }: { assets: Asset[] | undefined }) => {
+const AssetsTable = ({ assets }: { assets: any[] | undefined }) => {
   const [assetsPerPage, setAssetsPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
@@ -144,7 +143,7 @@ export default function Assets() {
       <p className="text-gray-600 max-w-4xl text-center">
         Explore a comprehensive directory of assets, curated from various
         trusted providers including{" "}
-        {providers?.map((provider, index, array) =>
+        {providers?.map((provider: any, index:any, array:any) =>
           index === array.length - 1
             ? `and ${provider.provider}.`
             : `${provider.provider}, `

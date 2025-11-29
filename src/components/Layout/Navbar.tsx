@@ -5,18 +5,15 @@ import SearchBar from "./SearchBar";
 import { FiMenu } from "react-icons/fi";
 import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
-
-import { ConnectWalletButton } from "../Buttons/ConnectWalletButton";
-import { useSorobanReact } from "@soroban-react/core";
-import { ConnectedWallet } from "../ConnectedWallet";
 import { SidebarContext } from "@/context/sidebar/SidebarContext";
-
+import { useUserContext } from "@/contexts/UserContext";
+import { ConnectWallet } from "../Buttons/ConnectWalletButton";
 interface NavProps {
   onOpen: () => void;
 }
 
 export default function Nav({ onOpen, ...rest }: NavProps) {
-  const { address } = useSorobanReact();
+  const { address } = useUserContext()
   const { isOpen } = useContext(SidebarContext);
   const [darkMode, setDarkMode] = useState(false);
 
@@ -78,7 +75,7 @@ export default function Nav({ onOpen, ...rest }: NavProps) {
             {darkMode ? <BiSun className="w-5 h-5" /> : <BiMoon className="w-5 h-5" />}
           </button>
           
-          {address ? <ConnectedWallet /> : <ConnectWalletButton />}
+          <ConnectWallet />
           
           <button
             className="flex md:hidden p-2 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800"

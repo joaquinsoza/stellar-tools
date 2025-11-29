@@ -1,13 +1,7 @@
 "use client";
-import { useMergedAssetLists } from "@/hooks/useMergedAssetsList";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { shortenAddress, shortenText } from "@/helpers/address";
-import { Asset } from "@stellar-asset-lists/sdk";
-import {
-  getAccountHistory,
-  useTransactionHistory,
-} from "@/hooks/useTransactionHistory";
+import { useTransactionHistory, Payment } from "@/hooks/useTransactionHistory";
 
 interface PaginationProps {
   totalPages: number;
@@ -65,11 +59,18 @@ const Pagination = ({
   );
 };
 
-const PaymentsTable = ({ payments }: { payments: any[] | undefined }) => {
-  const [assetsPerPage, setAssetsPerPage] = useState(8);
+const PaymentsTable = ({ payments }: { payments: Payment[] }) => {
+  const [assetsPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
-  const router = useRouter();
-  if (!payments) return;
+
+  if (!payments || payments.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 bg-gray-50 rounded-lg">
+        <p className="text-gray-500 text-lg">No transactions yet</p>
+        <p className="text-gray-400 text-sm mt-2">Connect your wallet to see your transaction history</p>
+      </div>
+    );
+  }
 
   const lastAssetIndex = currentPage * assetsPerPage;
   const firstAssetIndex = lastAssetIndex - assetsPerPage;
@@ -154,8 +155,7 @@ const PaymentsTable = ({ payments }: { payments: any[] | undefined }) => {
 };
 
 export default function TransactionsPage() {
-  const { transactions, operations, payments, isLoading } =
-    useTransactionHistory();
+  const { payments, isLoading } = useTransactionHistory();
 
   return (
     <div className="flex flex-col items-center space-y-4 px-1 md:px-6">

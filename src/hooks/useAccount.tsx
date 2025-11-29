@@ -1,27 +1,12 @@
-import useSWR from "swr";
-import { SorobanContextType, useSorobanReact } from "@soroban-react/core";
-
-const fetcher = async (sorobanContext: SorobanContextType) => {
-  const { serverHorizon, address } = sorobanContext;
-  if (!address) return;
-  const account = await serverHorizon?.loadAccount(address);
-  return account;
-};
+import { useUserContext } from "@/contexts/UserContext";
 
 export const useAccount = () => {
-  const sorobanContext = useSorobanReact();
+  const { address } = useUserContext();
 
-  const { data, error } = useSWR(
-    sorobanContext.address ? [sorobanContext.address] : null,
-    () => fetcher(sorobanContext),
-    {
-      shouldRetryOnError: false,
-    }
-  );
-
+  // Mock data - will be replaced with actual Horizon API calls later
   return {
-    account: data,
-    isLoading: !error && !data,
-    isError: error,
+    account: address ? { balances: [] } : undefined,
+    isLoading: false,
+    isError: false,
   };
 };

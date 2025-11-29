@@ -3,7 +3,6 @@ import React, { useState, useMemo, useRef, useEffect } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { useMergedAssetLists } from "@/hooks/useMergedAssetsList";
 import Link from "next/link";
-import { Asset } from "@stellar-asset-lists/sdk";
 import Image from "next/image";
 
 const SearchBar = () => {
@@ -27,7 +26,7 @@ const SearchBar = () => {
   }, []);
 
   const filteredAssets = useMemo(() => {
-    return assets?.filter((asset: Asset) => {
+    return assets?.filter((asset: any) => { //TODO: sewt asset type
       // Normalize search term and asset properties for case-insensitive comparison
       const term = searchTerm.toLowerCase();
       const matchesCodeIssuer =
@@ -51,7 +50,7 @@ const SearchBar = () => {
     });
   }, [searchTerm, assets]);
 
-  const getRedirectUrl = (asset: Asset) => {
+  const getRedirectUrl = (asset: any) => { // TODO: Set an asset type
     if (asset.contract) {
       return `/assets/${asset.contract}`;
     } else if (!asset.contract) {
@@ -89,7 +88,7 @@ const SearchBar = () => {
       {filteredAssets && filteredAssets.length > 0 && searchTerm.length > 0 && isOpen && (
         <div className="absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 shadow-lg max-h-60 rounded-md border border-gray-200 dark:border-gray-600 overflow-auto">
           <div className="p-4">
-            {filteredAssets.map((asset: Asset, index: number) => (
+            {filteredAssets.map((asset: any, index: number) => (
               <Link key={index} href={getRedirectUrl(asset)} onClick={handleClose}>
                 <div className="flex py-2 items-center justify-start gap-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
                   <div className="flex-shrink-0">

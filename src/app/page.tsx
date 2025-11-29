@@ -4,8 +4,8 @@ import FeaturesComponent from "@/components/FeaturesComponent";
 export default function Home() {
   return (
     <main>
-      <FeaturedSlider />
-      <FeaturesComponent />
+      {/* <FeaturedSlider />
+      <FeaturesComponent /> */}
     </main>
   );
 }
