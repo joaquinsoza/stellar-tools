@@ -89,12 +89,12 @@ const SearchBar = () => {
               <Link key={index} href={getRedirectUrl(asset)} onClick={handleClose}>
                 <div className="flex py-2 items-center justify-start gap-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
                   <div className="flex-shrink-0">
-                    {asset.icon ? (
-                      <Image 
-                        src={asset.icon} 
-                        alt={asset.name || asset.code} 
-                        width={40} 
-                        height={40} 
+                    {asset.icon?.trim() ? (
+                      <Image
+                        src={asset.icon.trim()}
+                        alt={asset.name || asset.code}
+                        width={40}
+                        height={40}
                         className="rounded-full"
                       />
                     ) : (

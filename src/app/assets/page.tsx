@@ -99,7 +99,7 @@ const AssetsTable = ({ assets }: { assets: any[] | undefined }) => {
               >
                 <td className="px-6 py-4 whitespace-nowrap">
                   <img
-                    src={asset.icon}
+                    src={asset.icon?.trim()}
                     alt={asset.code}
                     className="w-8 h-8 rounded-full"
                   />
