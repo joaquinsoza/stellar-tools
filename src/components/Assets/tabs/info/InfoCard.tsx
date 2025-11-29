@@ -1,29 +1,40 @@
 import { FC } from "react";
+import Image from "next/image";
 
-type AssetInfoProps = {
+type InfoCardProps = {
   title: string;
   content: string | number;
   icon: string;
 };
 
-export const InfoCard: FC<AssetInfoProps> = ({
+export const InfoCard: FC<InfoCardProps> = ({
   title = "-",
   content = "-",
   icon,
 }) => {
+  const displayContent = content ?? "-";
+  const formattedContent =
+    typeof displayContent === "number"
+      ? displayContent.toLocaleString()
+      : displayContent;
+
   return (
-    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg max-w-sm p-4">
-      <div className="mb-4">
-        <img src={icon} alt={`${icon} icon`} width={40} height={40} />
+    <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+      <div className="flex items-center gap-2 mb-2">
+        <Image
+          src={icon}
+          alt={`${title} icon`}
+          width={16}
+          height={16}
+          className="opacity-60"
+        />
+        <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+          {title}
+        </span>
       </div>
-      <div>
-        <h3 className="font-normal text-gray-500 dark:text-gray-400 text-base mb-5 tracking-wide">
-          {title ? title.toUpperCase() : ""}
-        </h3>
-        <p className="text-gray-700 dark:text-gray-200 text-2xl font-bold">
-          {typeof content === "number" ? content : content?.toUpperCase()}
-        </p>
-      </div>
+      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
+        {formattedContent}
+      </p>
     </div>
   );
 };

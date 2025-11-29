@@ -42,13 +42,13 @@ export const AssetInfo: FC<AssetInfoProps> = ({
   ];
 
   return (
-    <div className="flex flex-col space-y-1 items-start p-4">
+    <div className="p-4">
       {asset?.comment && (
-        <p className="italic text-gray-500 dark:text-gray-400">
-          List provider comment: {`"${asset?.comment}"`}
+        <p className="italic text-sm text-gray-500 dark:text-gray-400 mb-4">
+          List provider comment: &quot;{asset?.comment}&quot;
         </p>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-center items-center w-4/5">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {cardsInfo.map((cardInfo) => (
           <InfoCard
             title={cardInfo.title}

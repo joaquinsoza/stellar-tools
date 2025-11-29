@@ -8,32 +8,20 @@ import {
   UseAssetInformationProps,
   useAssetInformation,
 } from "@/hooks/useAssetInformation";
-import { useClipboard } from "@/hooks/useClipboard";
 import { useParams } from "next/navigation";
 import { DexPoolTable } from "@/components/Assets/pools/DexPoolTable";
 import { AssetInfo } from "@/components/Assets/tabs/info/AssetInfo";
 import { CommingSoon } from "@/components/DisabledComponents/CommingSoon";
 
-type PoolsTable = {
-  asset?: any;
-};
-
-const PoolsTable = ({ asset }: PoolsTable) => {
-  return (
-    <Tab.Panel>
-      {asset ? (
-        <DexPoolTable asset={asset} />
-      ) : (
-        <p className="text-gray-600 dark:text-gray-400">Select an asset to view pools.</p>
-      )}
-    </Tab.Panel>
-  );
-};
+const tabClasses = ({ selected }: { selected: boolean }) =>
+  `flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
+    selected
+      ? "bg-pink-500 text-white"
+      : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+  }`;
 
 export default function Asset() {
-  const copyToClipboard = useClipboard();
   const { param } = useParams<{ param: string }>();
-  let temporalSkeletons = Array.from({ length: 8 }, (_, i) => i);
 
   let assetProps: UseAssetProps = {};
   let assetInformationProps: UseAssetInformationProps = {};
@@ -51,20 +39,15 @@ export default function Asset() {
     assetInformationProps = { code: asset.code, issuer: asset.issuer };
   }
   const { data: assetInformation } = useAssetInformation(assetInformationProps);
-  const name = asset?.name
-    ? asset.name
-    : asset?.code
-    ? asset.code
-    : assetInformation?.asset_code;
 
-  const issuer = asset?.issuer ? asset.issuer : assetInformation?.asset_issuer;
-
-  // Example on how to get the pools, TODO: Make it so it can do an infinite scroll... more details in Issue #3
+  const name = asset?.name || asset?.code || assetInformation?.asset_code;
+  const issuer = asset?.issuer || assetInformation?.asset_issuer;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-      {/* Asset Card */}
-      <div className="md:col-span-4">
+    <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col gap-4 min-w-0">
+        {/* Asset Card */}
         <AssetCard
           name={name}
           icon={asset?.icon}
@@ -73,70 +56,60 @@ export default function Asset() {
           domain={asset?.domain}
           issuer={issuer}
         />
-      </div>
-      
-      {/* Action Panel */}
-      <div className="md:col-span-1 md:row-span-2">
-        <AssetActionPanel asset={asset} />
-      </div>
-      
-      {/* Tabs Section */}
-      <div className="md:col-span-4">
-        <Tab.Group>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl w-full h-full">
-            <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 dark:bg-blue-900/40 p-1">
-              <Tab className={({ selected }) =>
-                `w-full rounded-lg py-2.5 text-sm font-medium leading-5 ${
-                  selected
-                    ? 'bg-white dark:bg-gray-700 shadow text-blue-700 dark:text-blue-400'
-                    : 'text-blue-600 dark:text-blue-300 hover:bg-white/[0.12] hover:text-blue-800 dark:hover:text-white'
-                }`
-              }>
-                Info
-              </Tab>
-              <Tab className={({ selected }) =>
-                `w-full rounded-lg py-2.5 text-sm font-medium leading-5 ${
-                  selected
-                    ? 'bg-white dark:bg-gray-700 shadow text-blue-700 dark:text-blue-400'
-                    : 'text-blue-600 dark:text-blue-300 hover:bg-white/[0.12] hover:text-blue-800 dark:hover:text-white'
-                }`
-              }>
-                Pools
-              </Tab>
-              <Tab className={({ selected }) =>
-                `w-full rounded-lg py-2.5 text-sm font-medium leading-5 ${
-                  selected
-                    ? 'bg-white dark:bg-gray-700 shadow text-blue-700 dark:text-blue-400'
-                    : 'text-blue-600 dark:text-blue-300 hover:bg-white/[0.12] hover:text-blue-800 dark:hover:text-white'
-                }`
-              }>
-                Transactions
-              </Tab>
+
+        {/* Tabs Section */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+          <Tab.Group>
+            <Tab.List className="flex gap-1 p-1.5 bg-gray-100 dark:bg-gray-700/50 rounded-t-xl">
+              <Tab className={tabClasses}>Info</Tab>
+              <Tab className={tabClasses}>Pools</Tab>
+              <Tab className={tabClasses}>Transactions</Tab>
             </Tab.List>
-            <Tab.Panels className="min-h-[400px]">
+            <Tab.Panels>
               <Tab.Panel>
                 <AssetInfo
-                  asset={asset!}
+                  asset={asset}
                   assetInformation={assetInformation}
                   issuer={issuer}
                 />
               </Tab.Panel>
-              <PoolsTable asset={asset!} />
               <Tab.Panel>
-                <div className="relative p-4 h-96">
-                  <div className="space-y-3">
-                    {temporalSkeletons.map((i) => (
-                      <div key={i} className="h-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                {asset ? (
+                  <DexPoolTable asset={asset} />
+                ) : (
+                  <div className="p-6 text-center text-gray-500 dark:text-gray-400">
+                    Loading asset data...
+                  </div>
+                )}
+              </Tab.Panel>
+              <Tab.Panel>
+                <div className="relative p-4">
+                  <div className="space-y-2">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="h-10 bg-gray-100 dark:bg-gray-700 rounded animate-pulse"
+                      />
                     ))}
                   </div>
-                  <div className="max-h-96">
-                    <CommingSoon />
-                  </div>
+                  <CommingSoon />
                 </div>
               </Tab.Panel>
             </Tab.Panels>
-          </div>
-        </Tab.Group>
+          </Tab.Group>
+        </div>
+
+        {/* Action Panel - Mobile (after tabs) */}
+        <div className="lg:hidden">
+          <AssetActionPanel asset={asset} />
+        </div>
+      </div>
+
+      {/* Sidebar - Desktop */}
+      <div className="hidden lg:block lg:w-72 flex-shrink-0">
+        <div className="sticky top-4">
+          <AssetActionPanel asset={asset} />
+        </div>
       </div>
     </div>
   );
