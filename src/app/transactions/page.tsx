@@ -49,7 +49,7 @@ const Pagination = ({
           className={`px-3 py-2 border rounded-md transition-colors ${
             currentPage === startPage + i
               ? 'bg-blue-500 text-white border-blue-500'
-              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
           }`}
         >
           {startPage + i}
@@ -65,9 +65,9 @@ const PaymentsTable = ({ payments }: { payments: Payment[] }) => {
 
   if (!payments || payments.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 bg-gray-50 rounded-lg">
-        <p className="text-gray-500 text-lg">No transactions yet</p>
-        <p className="text-gray-400 text-sm mt-2">Connect your wallet to see your transaction history</p>
+      <div className="flex flex-col items-center justify-center h-64 bg-gray-50 dark:bg-gray-800 rounded-lg">
+        <p className="text-gray-500 dark:text-gray-400 text-lg">No transactions yet</p>
+        <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">Connect your wallet to see your transaction history</p>
       </div>
     );
   }
@@ -82,19 +82,19 @@ const PaymentsTable = ({ payments }: { payments: Payment[] }) => {
   return (
     <div>
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-          <thead className="bg-gray-50">
+        <table className="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+          <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Type</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">From</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">To</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Amount</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">TxHash</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden md:table-cell">Type</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Code</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden md:table-cell">From</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden md:table-cell">To</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden md:table-cell">Amount</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">TxHash</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {currentPayments.map((payment) => {
               const created_at = new Date(payment.created_at).toLocaleString(
                 undefined,
@@ -112,29 +112,29 @@ const PaymentsTable = ({ payments }: { payments: Payment[] }) => {
                       `https://stellar.expert/explorer/public/tx/${payment.transaction_hash}`
                     )
                   }
-                  className="cursor-pointer hover:bg-gray-50 transition-colors"
+                  className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     {created_at}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 hidden md:table-cell">
                     {payment.type}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                     {payment.asset_type === "native"
                       ? "XLM"
                       : payment.asset_code}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 hidden md:table-cell">
                     {shortenAddress(payment.from)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 hidden md:table-cell">
                     {shortenAddress(payment.to)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 hidden md:table-cell">
                     {payment.amount}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                     {shortenText(payment.transaction_hash)}
                   </td>
                 </tr>
@@ -159,16 +159,16 @@ export default function TransactionsPage() {
 
   return (
     <div className="flex flex-col items-center space-y-4 px-1 md:px-6">
-      <h1 className="text-4xl font-bold text-center">
+      <h1 className="text-4xl font-bold text-center text-gray-900 dark:text-gray-100">
         Transactions
       </h1>
-      <p className="text-gray-600 max-w-4xl text-center">
+      <p className="text-gray-600 dark:text-gray-400 max-w-4xl text-center">
         take a look at your transactions history and export to any format you
         might need
       </p>
       <div className={`w-full ${isLoading ? 'animate-pulse' : ''}`}>
         {isLoading ? (
-          <div className="bg-gray-200 h-96 rounded-lg"></div>
+          <div className="bg-gray-200 dark:bg-gray-700 h-96 rounded-lg"></div>
         ) : (
           <PaymentsTable payments={payments} />
         )}

@@ -55,24 +55,28 @@ export const SidebarContent = ({ onClose, className = "", ...rest }: SidebarProp
       onMouseLeave={() => setIsOpen(false)}
       {...rest}
     >
-      <div className="flex h-20 items-center pl-5 justify-between border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center gap-4 rounded-lg">
+      <div className={`flex h-20 items-center ${isOpen ? 'pl-5 justify-between' : 'justify-center'} border-b border-gray-200 dark:border-gray-700`}>
+        <div className={`flex items-center ${isOpen ? 'gap-4' : ''} rounded-lg`}>
           <Image
             width={45}
             height={45}
             alt="StellarTools"
             src="/stellartools.svg"
           />
-          <h1 className="font-roboto text-lg font-medium whitespace-nowrap overflow-hidden">
-            STELLAR TOOLS
-          </h1>
+          {isOpen && (
+            <h1 className="font-roboto text-lg font-medium whitespace-nowrap overflow-hidden text-gray-900 dark:text-gray-100">
+              STELLAR TOOLS
+            </h1>
+          )}
         </div>
-        <button
-          className="flex md:hidden mr-8 p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-          onClick={onClose}
-        >
-          <FiX className="w-5 h-5" />
-        </button>
+        {isOpen && (
+          <button
+            className="flex md:hidden mr-8 p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+            onClick={onClose}
+          >
+            <FiX className="w-5 h-5" />
+          </button>
+        )}
       </div>
       
       <div className="py-4">
@@ -90,7 +94,7 @@ export const SidebarContent = ({ onClose, className = "", ...rest }: SidebarProp
       </div>
       
       <div className="absolute bottom-0 w-full">
-        <div className="flex justify-center space-x-4 pb-4">
+        <div className={`flex justify-center pb-4 ${isOpen ? 'space-x-4' : 'flex-col items-center space-y-4'}`}>
           <Link
             href="https://github.com/joaquinsoza/stellar-tools"
             target="_blank"
@@ -98,8 +102,8 @@ export const SidebarContent = ({ onClose, className = "", ...rest }: SidebarProp
           >
             <FaGithub className="w-6 h-6" />
           </Link>
-          <Link 
-            href="https://discord.gg/Bq8qSteFSz" 
+          <Link
+            href="https://discord.gg/Bq8qSteFSz"
             target="_blank"
             className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
           >

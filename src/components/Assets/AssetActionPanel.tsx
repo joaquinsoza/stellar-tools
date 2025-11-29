@@ -32,35 +32,35 @@ export function AssetActionPanel({ asset }: AssetActionProps) {
 
   return (
     <div className="flex flex-col space-y-4 w-64">
-      <div className="bg-white rounded-2xl p-4 min-h-96 shadow-md">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 min-h-96 shadow-md">
         <div className="flex flex-col items-center justify-start space-y-6">
           {/* Wallet Icon */}
-          <div className="bg-blue-50 p-4 rounded-full">
+          <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-full">
             <FaWallet className="w-8 h-8 text-blue-400" />
           </div>
 
           {/* Wallet Header */}
-          <h3 className="text-xl font-bold">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
             Your Wallet
           </h3>
 
           <div className="flex flex-col space-y-1 items-start">
             {/* Balance Section */}
             <div className="flex flex-col space-y-1 items-start">
-              <span className="text-lg font-semibold">
+              <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                 {assetForAccount?.balance || "0.000000"} {asset?.code || "ETH"}
               </span>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-500 dark:text-gray-400">
                 BALANCE
               </span>
             </div>
 
             {/* Limit Section */}
             <div className="flex flex-col space-y-1 items-start">
-              <span className="text-lg font-semibold">
+              <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                 {assetForAccount?.limit ?? "0"} {asset?.code || "ETH"}
               </span>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-500 dark:text-gray-400">
                 LIMIT
               </span>
             </div>
@@ -76,15 +76,15 @@ export function AssetActionPanel({ asset }: AssetActionProps) {
                   ? "Expired"
                   : "Not Deployed"}
               </span>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 dark:text-gray-400">
                 CONTRACT
               </span>
             </div>
             <div className="flex flex-col items-start">
-              <span className="text-sm font-medium">
+              <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                 {contractInfo.remaining}
               </span>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 dark:text-gray-400">
                 TIME REMAINING
               </span>
             </div>
@@ -92,7 +92,7 @@ export function AssetActionPanel({ asset }: AssetActionProps) {
         </div>
         <ConnectWalletToUse />
       </div>
-      <div className="bg-white rounded-2xl p-6 shadow-md">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md">
         {/* Action Buttons */}
         <div className="flex flex-col space-y-4 w-full">
           <button
@@ -101,7 +101,7 @@ export function AssetActionPanel({ asset }: AssetActionProps) {
             className={`w-full h-8 border border-pink-500 text-pink-500 rounded-md text-sm transition-colors ${
               !isDeployedOnSoroban || isBumping
                 ? 'opacity-50 cursor-not-allowed'
-                : 'hover:bg-pink-50'
+                : 'hover:bg-pink-50 dark:hover:bg-pink-900/20'
             }`}
           >
             {isBumping ? 'Bumping...' : 'Bump Contract'}
@@ -112,7 +112,7 @@ export function AssetActionPanel({ asset }: AssetActionProps) {
             className={`w-full h-8 border border-pink-500 text-pink-500 rounded-md text-sm transition-colors ${
               isDeployedOnSoroban || isDeploying
                 ? 'opacity-50 cursor-not-allowed'
-                : 'hover:bg-pink-50'
+                : 'hover:bg-pink-50 dark:hover:bg-pink-900/20'
             }`}
           >
             {isDeploying ? 'Deploying...' : 'Deploy on Soroban'}

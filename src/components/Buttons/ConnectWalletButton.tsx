@@ -29,7 +29,7 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center">
       <button
-        className="bg-brand hover:bg-brand/80 relative flex h-14 cursor-pointer items-center rounded-2xl px-2 text-center text-[20px] font-bold text-white"
+        className="bg-pink-500 hover:bg-pink-600 relative flex h-14 cursor-pointer items-center rounded-2xl px-2 text-center text-[20px] font-bold text-white"
         onClick={handleConnectWallet}
         aria-expanded={isDropdownOpen}
         aria-haspopup="true"
@@ -39,7 +39,7 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
 
       {isDropdownOpen && userAddress && (
         <div
-          className="absolute top-full left-1/2 z-50 mt-1 -translate-x-1/2 transform rounded-xl bg-[#8866DD] p-1 shadow-lg"
+          className="absolute top-full left-1/2 z-50 mt-1 -translate-x-1/2 transform rounded-xl bg-pink-600 p-1 shadow-lg"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="wallet-menu"

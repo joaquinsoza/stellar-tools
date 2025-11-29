@@ -14,31 +14,31 @@ export function DexPoolTable({ asset }: DexPoolTableProps) {
   return (
     <div
       ref={scrollRef}
-      className="max-h-96 max-w-7xl overflow-y-auto border border-gray-200 rounded-lg p-4"
+      className="max-h-96 max-w-7xl overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg p-4"
     >
       {loading ? (
         <div>
           {Array.from({ length: 5 }).map((_, index) => (
-            <div key={index} className="h-10 bg-gray-200 rounded animate-pulse my-2" />
+            <div key={index} className="h-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse my-2" />
           ))}
         </div>
       ) : (
-        <table className="min-w-full bg-white">
-          <thead className="bg-gray-50">
+        <table className="min-w-full bg-white dark:bg-gray-800">
+          <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 Action
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pair</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Pair</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Price</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {pools.length > 0 ? (
               pools.map((pool) => (
                 <tr
                   key={pool.id}
-                  className="cursor-pointer hover:bg-gray-50"
+                  className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
@@ -47,15 +47,15 @@ export function DexPoolTable({ asset }: DexPoolTableProps) {
                       View Pool
                     </button>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">--</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">--</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">--</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">--</td>
                 </tr>
               ))
             ) : (
               <tr>
                 <td colSpan={3}>
                   <div className="flex justify-center items-center h-full py-8">
-                    <span className="text-gray-500">No pools available yet.</span>
+                    <span className="text-gray-500 dark:text-gray-400">No pools available yet.</span>
                   </div>
                 </td>
               </tr>

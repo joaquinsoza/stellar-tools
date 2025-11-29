@@ -46,16 +46,16 @@ export default function ContractsPage() {
 
   return (
     <div className="flex flex-col items-center space-y-6 px-4 md:px-8 py-8">
-      <h1 className="text-4xl font-bold mb-4">
+      <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">
         Contract Management
       </h1>
-      <p className="text-gray-600 text-center max-w-lg">
+      <p className="text-gray-600 dark:text-gray-400 text-center max-w-lg">
         View and manage the time-to-live for any contract address on the Soroban
         network.
       </p>
 
       {/* Contract Ledger Info */}
-      <div className="w-full max-w-lg p-6 rounded-md shadow-lg bg-gray-50">
+      <div className="w-full max-w-lg p-6 rounded-md shadow-lg bg-gray-50 dark:bg-gray-800">
         <h2 className="text-xl font-semibold mb-4 text-blue-500">
           Contract Ledger Information
         </h2>
@@ -65,13 +65,13 @@ export default function ContractsPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
           </div>
         ) : ledgerInfo ? (
-          <div className="space-y-3">
+          <div className="space-y-3 text-gray-900 dark:text-gray-100">
             <div className="flex items-center space-x-2">
               <span className="font-bold">Status:</span>
               <span className={`px-2 py-1 rounded text-sm font-medium ${
-                ledgerInfo.isActive 
-                  ? 'bg-green-100 text-green-800' 
-                  : 'bg-red-100 text-red-800'
+                ledgerInfo.isActive
+                  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                  : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
               }`}>
                 {ledgerInfo.isActive ? "Active" : "Expired"}
               </span>
@@ -94,13 +94,13 @@ export default function ContractsPage() {
             </div>
           </div>
         ) : (
-          <p className="text-gray-500">
+          <p className="text-gray-500 dark:text-gray-400">
             Enter a valid contract address to view details.
           </p>
         )}
       </div>
 
-      <hr className="w-full max-w-lg border-gray-300" />
+      <hr className="w-full max-w-lg border-gray-300 dark:border-gray-600" />
 
       {/* Input and Action Buttons */}
       <div className="flex flex-col items-center space-y-4 w-full max-w-lg">
@@ -110,7 +110,7 @@ export default function ContractsPage() {
             placeholder="Enter Contract Address"
             value={contractAddress}
             onChange={(e) => handleAddressChange(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
           />
         </div>
         <div className="flex space-x-4 w-full">

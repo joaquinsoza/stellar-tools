@@ -18,11 +18,10 @@ export default function Nav({ onOpen, ...rest }: NavProps) {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    // Check for saved theme preference or default to light mode
+    // Check for saved theme preference, default to light mode
     const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+
+    if (savedTheme === 'dark') {
       setDarkMode(true);
       document.documentElement.classList.add('dark');
     } else {
@@ -69,7 +68,7 @@ export default function Nav({ onOpen, ...rest }: NavProps) {
 
         <div className="flex items-center space-x-1 md:space-x-4">
           <button
-            className="hidden md:flex items-center justify-center p-2 rounded-md bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+            className="hidden md:flex items-center justify-center p-2 rounded-md bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"
             onClick={toggleDarkMode}
           >
             {darkMode ? <BiSun className="w-5 h-5" /> : <BiMoon className="w-5 h-5" />}
@@ -78,7 +77,7 @@ export default function Nav({ onOpen, ...rest }: NavProps) {
           <ConnectWallet />
           
           <button
-            className="flex md:hidden p-2 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800"
+            className="flex md:hidden p-2 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
             onClick={onOpen}
             aria-label="open menu"
           >

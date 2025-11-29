@@ -24,7 +24,7 @@ const PoolsTable = ({ asset }: PoolsTable) => {
       {asset ? (
         <DexPoolTable asset={asset} />
       ) : (
-        <p className="text-gray-600">Select an asset to view pools.</p>
+        <p className="text-gray-600 dark:text-gray-400">Select an asset to view pools.</p>
       )}
     </Tab.Panel>
   );
@@ -83,31 +83,31 @@ export default function Asset() {
       {/* Tabs Section */}
       <div className="md:col-span-4">
         <Tab.Group>
-          <div className="bg-white rounded-2xl w-full h-full">
-            <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl w-full h-full">
+            <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 dark:bg-blue-900/40 p-1">
               <Tab className={({ selected }) =>
-                `w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700 ${
+                `w-full rounded-lg py-2.5 text-sm font-medium leading-5 ${
                   selected
-                    ? 'bg-white shadow'
-                    : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
+                    ? 'bg-white dark:bg-gray-700 shadow text-blue-700 dark:text-blue-400'
+                    : 'text-blue-600 dark:text-blue-300 hover:bg-white/[0.12] hover:text-blue-800 dark:hover:text-white'
                 }`
               }>
                 Info
               </Tab>
               <Tab className={({ selected }) =>
-                `w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700 ${
+                `w-full rounded-lg py-2.5 text-sm font-medium leading-5 ${
                   selected
-                    ? 'bg-white shadow'
-                    : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
+                    ? 'bg-white dark:bg-gray-700 shadow text-blue-700 dark:text-blue-400'
+                    : 'text-blue-600 dark:text-blue-300 hover:bg-white/[0.12] hover:text-blue-800 dark:hover:text-white'
                 }`
               }>
                 Pools
               </Tab>
               <Tab className={({ selected }) =>
-                `w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700 ${
+                `w-full rounded-lg py-2.5 text-sm font-medium leading-5 ${
                   selected
-                    ? 'bg-white shadow'
-                    : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
+                    ? 'bg-white dark:bg-gray-700 shadow text-blue-700 dark:text-blue-400'
+                    : 'text-blue-600 dark:text-blue-300 hover:bg-white/[0.12] hover:text-blue-800 dark:hover:text-white'
                 }`
               }>
                 Transactions
@@ -126,7 +126,7 @@ export default function Asset() {
                 <div className="relative p-4 h-96">
                   <div className="space-y-3">
                     {temporalSkeletons.map((i) => (
-                      <div key={i} className="h-8 bg-gray-200 rounded animate-pulse" />
+                      <div key={i} className="h-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
                     ))}
                   </div>
                   <div className="max-h-96">
